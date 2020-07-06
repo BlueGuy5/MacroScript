@@ -1,0 +1,14 @@
+C:\Users\williamyu\source\repos\MacroScript\MacroScript\bin\Debug\MacroScript.exe.config
+C:\Users\williamyu\source\repos\MacroScript\MacroScript\bin\Debug\MacroScript.exe
+C:\Users\williamyu\source\repos\MacroScript\MacroScript\bin\Debug\MacroScript.pdb
+C:\Users\williamyu\source\repos\MacroScript\MacroScript\obj\Debug\MacroScript.csprojAssemblyReference.cache
+C:\Users\williamyu\source\repos\MacroScript\MacroScript\obj\Debug\MacroScript.Form1.resources
+C:\Users\williamyu\source\repos\MacroScript\MacroScript\obj\Debug\MacroScript.Properties.Resources.resources
+C:\Users\williamyu\source\repos\MacroScript\MacroScript\obj\Debug\MacroScript.csproj.GenerateResource.cache
+C:\Users\williamyu\source\repos\MacroScript\MacroScript\obj\Debug\MacroScript.csproj.CoreCompileInputs.cache
+C:\Users\williamyu\source\repos\MacroScript\MacroScript\obj\Debug\MacroScript.exe
+C:\Users\williamyu\source\repos\MacroScript\MacroScript\obj\Debug\MacroScript.pdb
+C:\Users\williamyu\source\repos\MacroScript\MacroScript\bin\Debug\MacroScript.exe.manifest
+C:\Users\williamyu\source\repos\MacroScript\MacroScript\bin\Debug\MacroScript.application
+C:\Users\williamyu\source\repos\MacroScript\MacroScript\obj\Debug\MacroScript.exe.manifest
+C:\Users\williamyu\source\repos\MacroScript\MacroScript\obj\Debug\MacroScript.application
