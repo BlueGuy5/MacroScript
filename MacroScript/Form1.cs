@@ -34,7 +34,7 @@ namespace MacroScript
             try
             {
                 string username = Environment.UserName;
-                txt_DirFiles.Text = @"C:\Users\" + username + @"\Documents\Frame_CMD\";
+                txt_DirFiles.Text = @"C:\Users\" + username + @"\Documents\MacroScript\";
 
             }
             catch(Exception ex)
@@ -84,10 +84,17 @@ namespace MacroScript
             return files;
         }
         private void getTxtFiles()
-        {           
-            foreach (string file in retDir())
+        {
+            try
             {
-                list_txtFiles.Items.Add(file.Replace(txt_DirFiles.Text,""));
+                foreach (string file in retDir())
+                {
+                    list_txtFiles.Items.Add(file.Replace(txt_DirFiles.Text, ""));
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "getTxtFiles()", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
         private void readTxtFiles(object sender, EventArgs e)
