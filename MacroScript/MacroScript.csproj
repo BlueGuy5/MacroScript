@@ -24,7 +24,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://localhost/MacroScript/</UpdateUrl>
-    <ApplicationRevision>24</ApplicationRevision>
+    <ApplicationRevision>46</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -97,6 +97,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="MacroScript_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
@@ -126,6 +127,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="macros_512_pvd_icon.ico" />
+    <None Include="Resources\playbutton.png" />
+    <None Include="Resources\macros-512.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
