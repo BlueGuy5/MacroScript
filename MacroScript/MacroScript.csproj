@@ -24,7 +24,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>http://localhost/MacroScript/</UpdateUrl>
-    <ApplicationRevision>46</ApplicationRevision>
+    <ApplicationRevision>56</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="macros_512_pvd_icon.ico" />
+    <None Include="Resources\folderimg.jpg" />
     <None Include="Resources\playbutton.png" />
     <None Include="Resources\macros-512.png" />
   </ItemGroup>

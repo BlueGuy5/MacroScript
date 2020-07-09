@@ -145,7 +145,8 @@ namespace MacroScript
             if (Set_window_to_forground() == true)
             {
                 runMacro("{bs}"); //must insert an additonal keystroke
-                runMacro("{Enter}");
+                runMacro("{Enter}"); //must insert an additonal keystroke
+                Thread.Sleep(10);
                 runMacro(btn_key.Text);
                 runMacro("{Enter}");
             }
@@ -167,22 +168,16 @@ namespace MacroScript
                 readTxtFiles(sender, e);
             }
         }
-
-        private void btn_Browse_Click(object sender, EventArgs e)
-        {
-            Process.Start(txt_DirFiles.Text);           
-        }
-        
+      
         private void pic_Reload_Click(object sender, EventArgs e)
         {
             getProcessList();
             getTxtFiles();
         }
-
         private void pic_PlayButton_Click(object sender, EventArgs e)
         {
             string fullpath = txt_DirFiles.Text + list_txtFiles.SelectedItem;
-            if (fullpath == txt_DirFiles.Text + "CustomMacro.txt")
+            if (fullpath.IndexOf("CustomMacro") >= 0)
             {
                 //runMacro("{bs}");
                 //read from textbox instead of textfile
@@ -212,6 +207,11 @@ namespace MacroScript
             {
                 MessageBox.Show("Must Select CustomMacro.txt", "Wrong File", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void pic_open_Click(object sender, EventArgs e)
+        {
+            Process.Start(txt_DirFiles.Text);
         }
     }
 }
