@@ -41,7 +41,6 @@ namespace MacroScript
             {
                 MessageBox.Show(ex.Message, "UserName Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-            txt_ProcessName.Text = "(input process name)";
             getProcessList();
             getTxtFiles();
         }
@@ -58,7 +57,7 @@ namespace MacroScript
         }
         public bool Set_window_to_forground()
         {
-            Process[] prc = Process.GetProcessesByName(txt_ProcessName.Text);
+            Process[] prc = Process.GetProcessesByName(DropDown_Process.Text);
             if (prc.Length > 0)
             {
                 //set window to foreground
@@ -67,16 +66,31 @@ namespace MacroScript
             }
             else
             {
-                MessageBox.Show("Process not found: " + txt_ProcessName.Text, "Set_window_to_forground", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Process not found: " + DropDown_Process.Text, "Set_window_to_forground", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
         private void getProcessList()
         {
-            list_ProcessName.Items.Clear();
+            //list_ProcessName.Items.Clear();
+            DropDown_Process.Items.Clear();
             foreach(Process proc in Process.GetProcesses())
             {
-                list_ProcessName.Items.Add(proc.ProcessName);
+                //list_ProcessName.Items.Add(proc.ProcessName);
+                DropDown_Process.Items.Add(proc.ProcessName);
+            }
+            DropDown_Process.MaxDropDownItems = this.Height / 20;
+        }
+
+        private void DropDown_Process_Click(object sender, EventArgs e)
+        {
+            getProcessList();
+        }
+        private void Drodown_Process_First_TextChange(object sender, EventArgs e)
+        {
+            if(DropDown_Process.Text.Length == 1)
+            {
+                getProcessList();
             }
         }
         private string[] retDir()
@@ -151,14 +165,6 @@ namespace MacroScript
                 runMacro("{Enter}");
             }
         }
-
-        private void list_ProcessName_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if(list_ProcessName.SelectedIndex >= 0)
-            {
-                txt_ProcessName.Text = list_ProcessName.SelectedItem.ToString();
-            }
-        }
         private void list_txtFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (list_txtFiles.SelectedIndex >= 0)
@@ -186,7 +192,7 @@ namespace MacroScript
                     if (Set_window_to_forground() == true)
                     {
                         //runMacro("{bs}");
-                        runMacro("{Enter}");
+                        //runMacro("{Enter}");
                         runMacro(line);
                     }
                     else
