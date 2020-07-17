@@ -37,6 +37,7 @@
             this.pic_PlayButton = new System.Windows.Forms.PictureBox();
             this.pic_reload = new System.Windows.Forms.PictureBox();
             this.DropDown_Process = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
+            this.btn_GetFileDir = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pic_open)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pic_PlayButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pic_reload)).BeginInit();
@@ -143,11 +144,23 @@
             this.DropDown_Process.DropDown += new System.EventHandler(this.DropDown_Process_Click);
             this.DropDown_Process.TextChanged += new System.EventHandler(this.Drodown_Process_First_TextChange);
             // 
+            // btn_GetFileDir
+            // 
+            this.btn_GetFileDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_GetFileDir.Location = new System.Drawing.Point(449, 210);
+            this.btn_GetFileDir.Name = "btn_GetFileDir";
+            this.btn_GetFileDir.Size = new System.Drawing.Size(32, 28);
+            this.btn_GetFileDir.TabIndex = 15;
+            this.btn_GetFileDir.Text = "FW";
+            this.btn_GetFileDir.UseVisualStyleBackColor = true;
+            this.btn_GetFileDir.Click += new System.EventHandler(this.btn_GetFileDir_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(486, 339);
+            this.Controls.Add(this.btn_GetFileDir);
             this.Controls.Add(this.DropDown_Process);
             this.Controls.Add(this.pic_open);
             this.Controls.Add(this.pic_PlayButton);
@@ -172,13 +185,14 @@
 
         #endregion
         private System.Windows.Forms.FlowLayoutPanel Panel_readfile;
-        private System.Windows.Forms.TextBox txt_readfiles;
         private System.Windows.Forms.TextBox txt_DirFiles;
         private System.Windows.Forms.ListBox list_txtFiles;
         private System.Windows.Forms.PictureBox pic_reload;
         private System.Windows.Forms.PictureBox pic_PlayButton;
         private System.Windows.Forms.PictureBox pic_open;
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv DropDown_Process;
+        private System.Windows.Forms.Button btn_GetFileDir;
+        public System.Windows.Forms.TextBox txt_readfiles;
     }
 }
 
