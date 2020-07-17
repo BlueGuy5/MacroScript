@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Channels;
@@ -35,7 +36,6 @@ namespace MacroScript
             {
                 string username = Environment.UserName;
                 txt_DirFiles.Text = @"C:\Users\" + username + @"\Documents\MacroScript\";
-
             }
             catch(Exception ex)
             {
@@ -76,8 +76,15 @@ namespace MacroScript
             DropDown_Process.Items.Clear();
             foreach(Process proc in Process.GetProcesses())
             {
-                //list_ProcessName.Items.Add(proc.ProcessName);
-                DropDown_Process.Items.Add(proc.ProcessName);
+                foreach (string list_proc in WhiteList_Process())
+                {
+                    if (proc.ProcessName == list_proc)
+                    {
+                        DropDown_Process.Items.Add(proc.ProcessName);
+                        break;
+                        
+                    }
+                }
             }
             DropDown_Process.MaxDropDownItems = this.Height / 20;
         }
@@ -218,6 +225,22 @@ namespace MacroScript
         private void pic_open_Click(object sender, EventArgs e)
         {
             Process.Start(txt_DirFiles.Text);
+        }
+
+        private void btn_GetFileDir_Click(object sender, EventArgs e)
+        {
+            FileDir _fileDir = new FileDir();
+            _fileDir.ShowDialog();
+        }
+        private List<string> WhiteList_Process()
+        {
+            var list_Whitelist = new List<string>();
+            list_Whitelist.Add("notepad");
+            list_Whitelist.Add("cmd");
+            list_Whitelist.Add("ttermpro");
+            list_Whitelist.Add("BTC");
+            //list_blackList.Add("RuntimeBroker");
+            return list_Whitelist;
         }
     }
 }
