@@ -40,6 +40,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.listbox_filesDir.FormattingEnabled = true;
+            this.listbox_filesDir.HorizontalScrollbar = true;
             this.listbox_filesDir.Location = new System.Drawing.Point(12, 31);
             this.listbox_filesDir.Name = "listbox_filesDir";
             this.listbox_filesDir.Size = new System.Drawing.Size(316, 264);

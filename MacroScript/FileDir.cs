@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,20 @@ namespace MacroScript
 
         private void FileDir_Load(object sender, EventArgs e)
         {
-            txt_dir.Text = @"C:\Users\williamyu\Documents\FW\";
+            Form f = Application.OpenForms["Form1"];
+            var Access_txtReadLines = ((Form1)f);
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = new Point(f.Location.X + f.Size.Width, f.Location.Y);
+
+            try
+            {
+                string username = Environment.UserName;
+                txt_dir.Text = @"C:\Users\" + username + @"\Documents\FW\";
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, txt_dir.Text + " Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
             getFWnum();
         }
         
@@ -64,6 +78,7 @@ namespace MacroScript
                     {
                         Access_txtReadLines.txt_readfiles.Text = Access_txtReadLines.txt_readfiles.Lines[0];
                         Access_txtReadLines.txt_readfiles.Text = Access_txtReadLines.txt_readfiles.Lines[0] + "\r\n" + listbox_filesDir.SelectedItem.ToString();
+                        startCMD(fw.Replace(@"\Tools\MIC_FR_Delta3.xlsx",""));
                         this.Dispose();
                         this.Close();
                     }
@@ -74,6 +89,21 @@ namespace MacroScript
         private void btn_Back_Click(object sender, EventArgs e)
         {
             getFWnum();
+        }
+        private void startCMD(string fw)
+        {
+            try
+            {
+                Process p = new Process();
+                p.StartInfo.FileName = "cmd.exe";
+                p.StartInfo.WorkingDirectory = fw;
+                p.StartInfo.UseShellExecute = false;
+                p.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "startCMD", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

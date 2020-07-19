@@ -39,35 +39,21 @@ namespace MacroScript
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.Message, "UserName Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(ex.Message, txt_DirFiles.Text + " Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             getProcessList();
             getTxtFiles();
         }
-        private void runMacro(string keys)
+
+        private void DropDown_Process_Click(object sender, EventArgs e)
         {
-            int chars = 256;
-            StringBuilder buff = new StringBuilder(chars);
-            IntPtr handle = GetForegroundWindow();
-            if (GetWindowText(handle, buff, chars) > 0)
-            {
-                SendKeys.SendWait(keys);
-                //SendKeys.Send("{Enter}");
-            }
+            getProcessList();
         }
-        public bool Set_window_to_forground()
+        private void Drodown_Process_First_TextChange(object sender, EventArgs e)
         {
-            Process[] prc = Process.GetProcessesByName(DropDown_Process.Text);
-            if (prc.Length > 0)
+            if (DropDown_Process.Text.Length == 1)
             {
-                //set window to foreground
-                SetForegroundWindow(prc[0].MainWindowHandle);
-                return true;            
-            }
-            else
-            {
-                MessageBox.Show("Process not found: " + DropDown_Process.Text, "Set_window_to_forground", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                getProcessList();
             }
         }
         private void getProcessList()
@@ -89,17 +75,6 @@ namespace MacroScript
             DropDown_Process.MaxDropDownItems = this.Height / 20;
         }
 
-        private void DropDown_Process_Click(object sender, EventArgs e)
-        {
-            getProcessList();
-        }
-        private void Drodown_Process_First_TextChange(object sender, EventArgs e)
-        {
-            if(DropDown_Process.Text.Length == 1)
-            {
-                getProcessList();
-            }
-        }
         private string[] retDir()
         {
            string[] files = System.IO.Directory.GetFiles(txt_DirFiles.Text);
@@ -159,19 +134,7 @@ namespace MacroScript
                 Panel_readfile.Controls.Add(btn_line);
             }
         }
-        private void writeCMD(object sender, EventArgs e)
-        {
-            Button btn_key = (Button)sender;
-            //Set_window_to_forground(btn_key.Text);
-            if (Set_window_to_forground() == true)
-            {
-                runMacro("{bs}"); //must insert an additonal keystroke
-                runMacro("{Enter}"); //must insert an additonal keystroke
-                Thread.Sleep(10);
-                runMacro(btn_key.Text);
-                runMacro("{Enter}");
-            }
-        }
+
         private void list_txtFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (list_txtFiles.SelectedIndex >= 0)
@@ -186,41 +149,7 @@ namespace MacroScript
         {
             getProcessList();
             getTxtFiles();
-        }
-        private void pic_PlayButton_Click(object sender, EventArgs e)
-        {
-            string fullpath = txt_DirFiles.Text + list_txtFiles.SelectedItem;
-            if (fullpath.IndexOf("CustomMacro") >= 0)
-            {
-                //runMacro("{bs}");
-                //read from textbox instead of textfile
-                foreach (string line in txt_readfiles.Lines)
-                {
-                    if (Set_window_to_forground() == true)
-                    {
-                        //runMacro("{bs}");
-                        //runMacro("{Enter}");
-                        runMacro(line);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                try
-                {
-                    System.IO.File.WriteAllLines(fullpath, txt_readfiles.Lines);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "btn_Run_Click", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-            else
-            {
-                MessageBox.Show("Must Select CustomMacro.txt", "Wrong File", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
+        }     
 
         private void pic_open_Click(object sender, EventArgs e)
         {
@@ -230,7 +159,7 @@ namespace MacroScript
         private void btn_GetFileDir_Click(object sender, EventArgs e)
         {
             FileDir _fileDir = new FileDir();
-            _fileDir.ShowDialog();
+            _fileDir.Show();
         }
         private List<string> WhiteList_Process()
         {
@@ -241,6 +170,104 @@ namespace MacroScript
             list_Whitelist.Add("BTC");
             //list_blackList.Add("RuntimeBroker");
             return list_Whitelist;
+        }
+        private int checkProcDuplicate()
+        {
+            string TargetProcessName = DropDown_Process.Text;
+            int processNameCnt = 0;
+            foreach(Process processName in Process.GetProcesses())
+            {
+                if(processName.ProcessName == TargetProcessName)
+                {
+                    processNameCnt++;
+                }
+            }
+            return processNameCnt;
+        }
+        private void pic_PlayButton_Click(object sender, EventArgs e)
+        {
+            string fullpath = txt_DirFiles.Text + list_txtFiles.SelectedItem;
+            if (fullpath.IndexOf("CustomMacro") >= 0)
+            {
+                if (checkProcDuplicate() <= 1)
+                {
+                    //read from textbox instead of textfile
+                    foreach (string line in txt_readfiles.Lines)
+                    {
+                        if (Set_window_to_forground() == true)
+                        {
+                            runMacro(line);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    try
+                    {
+                        System.IO.File.WriteAllLines(fullpath, txt_readfiles.Lines);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "btn_Run_Click", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Duplicate Proccess Detected: " + checkProcDuplicate().ToString(), DropDown_Process.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Must Select CustomMacro.txt", "Wrong File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void writeCMD(object sender, EventArgs e)
+        {
+            if (checkProcDuplicate() <= 1)
+            {
+                Button btn_key = (Button)sender;
+                //Set_window_to_forground(btn_key.Text);
+                if (Set_window_to_forground() == true)
+                {
+                    runMacro("{bs}"); //must insert an additonal keystroke
+                    runMacro("{Enter}"); //must insert an additonal keystroke
+                    Thread.Sleep(10);
+                    runMacro(btn_key.Text);
+                    runMacro("{Enter}");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Duplicate Proccess Detected: " + checkProcDuplicate().ToString(), DropDown_Process.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public bool Set_window_to_forground()
+        {
+            Process[] prc = Process.GetProcessesByName(DropDown_Process.Text);
+            if (prc.Length > 0)
+            {
+                //set window to foreground
+                SetForegroundWindow(prc[0].MainWindowHandle);
+                return true;
+            }
+            else
+            {
+                MessageBox.Show("Process not found: " + DropDown_Process.Text, "Set_window_to_forground", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+        private void runMacro(string keys)
+        {
+            int chars = 256;
+            StringBuilder buff = new StringBuilder(chars);
+            IntPtr handle = GetForegroundWindow();
+            if (GetWindowText(handle, buff, chars) > 0)
+            {
+                SendKeys.SendWait(keys);
+                //SendKeys.Send("{Enter}");
+            }
         }
     }
 }
