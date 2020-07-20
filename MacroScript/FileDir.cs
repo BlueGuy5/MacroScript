@@ -55,7 +55,7 @@ namespace MacroScript
             listbox_filesDir.Items.Clear();
             foreach(string dir in getFileDir)
             {
-                listbox_filesDir.Items.Add(dir);
+                listbox_filesDir.Items.Add(dir.Replace(txt_dir.Text,""));
             }
         }
 
@@ -77,8 +77,8 @@ namespace MacroScript
                     if (Access_txtReadLines.txt_readfiles.Lines.Length > 0)
                     {
                         Access_txtReadLines.txt_readfiles.Text = Access_txtReadLines.txt_readfiles.Lines[0];
-                        Access_txtReadLines.txt_readfiles.Text = Access_txtReadLines.txt_readfiles.Lines[0] + "\r\n" + listbox_filesDir.SelectedItem.ToString();
-                        startCMD(fw.Replace(@"\Tools\MIC_FR_Delta3.xlsx",""));
+                        Access_txtReadLines.txt_readfiles.Text = Access_txtReadLines.txt_readfiles.Lines[0] + "\r\n" + txt_dir.Text + listbox_filesDir.SelectedItem.ToString();
+                        startCMD(txt_dir.Text + fw.Replace(@"\tools\MIC_FR_Delta3.xlsx",""));
                         this.Dispose();
                         this.Close();
                     }
@@ -102,7 +102,7 @@ namespace MacroScript
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "startCMD", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message + "\r\n" + "Path:" + fw, "startCMD", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
