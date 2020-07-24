@@ -58,7 +58,7 @@
             this.listbox_filesDir.HorizontalScrollbar = true;
             this.listbox_filesDir.Location = new System.Drawing.Point(12, 41);
             this.listbox_filesDir.Name = "listbox_filesDir";
-            this.listbox_filesDir.Size = new System.Drawing.Size(309, 264);
+            this.listbox_filesDir.Size = new System.Drawing.Size(540, 264);
             this.listbox_filesDir.TabIndex = 4;
             this.listbox_filesDir.SelectedIndexChanged += new System.EventHandler(this.listbox_filesDir_SelectedIndexChanged);
             // 
@@ -66,7 +66,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(333, 317);
+            this.ClientSize = new System.Drawing.Size(564, 317);
             this.Controls.Add(this.listbox_filesDir);
             this.Controls.Add(this.btn_Back);
             this.Controls.Add(this.txt_dir);
