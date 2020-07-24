@@ -38,6 +38,7 @@
             this.pic_reload = new System.Windows.Forms.PictureBox();
             this.DropDown_Process = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.btn_GetFileDir = new System.Windows.Forms.Button();
+            this.btn_adb_click = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pic_open)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pic_PlayButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pic_reload)).BeginInit();
@@ -155,11 +156,24 @@
             this.btn_GetFileDir.UseVisualStyleBackColor = true;
             this.btn_GetFileDir.Click += new System.EventHandler(this.btn_GetFileDir_Click);
             // 
+            // btn_adb_click
+            // 
+            this.btn_adb_click.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_adb_click.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btn_adb_click.Location = new System.Drawing.Point(449, 244);
+            this.btn_adb_click.Name = "btn_adb_click";
+            this.btn_adb_click.Size = new System.Drawing.Size(32, 28);
+            this.btn_adb_click.TabIndex = 16;
+            this.btn_adb_click.Text = "adb";
+            this.btn_adb_click.UseVisualStyleBackColor = true;
+            this.btn_adb_click.Click += new System.EventHandler(this.adb_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(486, 339);
+            this.Controls.Add(this.btn_adb_click);
             this.Controls.Add(this.btn_GetFileDir);
             this.Controls.Add(this.DropDown_Process);
             this.Controls.Add(this.pic_open);
@@ -193,6 +207,7 @@
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv DropDown_Process;
         private System.Windows.Forms.Button btn_GetFileDir;
         public System.Windows.Forms.TextBox txt_readfiles;
+        private System.Windows.Forms.Button btn_adb_click;
     }
 }
 

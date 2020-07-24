@@ -161,6 +161,11 @@ namespace MacroScript
             FileDir _fileDir = new FileDir();
             _fileDir.Show();
         }
+        private void adb_Click(object sender, EventArgs e)
+        {
+            adbfiles _adbfiles = new adbfiles();
+            _adbfiles.Show();
+        }
         private List<string> WhiteList_Process()
         {
             var list_Whitelist = new List<string>();

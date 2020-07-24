@@ -1,0 +1,81 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace MacroScript
+{
+    public partial class adbfiles : Form
+    {
+        public adbfiles()
+        {
+            InitializeComponent();
+        }
+
+        private void adbfiles_Load(object sender, EventArgs e)
+        {
+            Form f = Application.OpenForms["Form1"];
+            var Access_txtReadLines = ((Form1)f);
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = new Point(f.Location.X + f.Size.Width, f.Location.Y);
+
+            try
+            {
+                string username = Environment.UserName;
+                txt_dir.Text = @"C:\Users\" + username + @"\Documents\ADB Packs\";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, txt_dir.Text + " Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            adbGetPacks();
+        }
+        private void adbGetPacks()
+        {
+            var getFileDir = System.IO.Directory.GetFiles(txt_dir.Text,"*.*", System.IO.SearchOption.AllDirectories).Where(s => s.EndsWith(".apk",StringComparison.OrdinalIgnoreCase));
+            listbox_filesDir.Items.Clear();
+            foreach (string dir in getFileDir)
+            {
+                listbox_filesDir.Items.Add(dir.Replace(txt_dir.Text, ""));
+            }
+        }
+
+        private void listbox_filesDir_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listbox_filesDir.SelectedIndex >= 0)
+            {
+                Form f = Application.OpenForms["Form1"];
+                var Access_txtReadLines = ((Form1)f);
+                if (Access_txtReadLines.txt_readfiles.Lines.Length > 0)
+                {
+                    Access_txtReadLines.txt_readfiles.Text = Access_txtReadLines.txt_readfiles.Lines[0];
+                    Access_txtReadLines.txt_readfiles.Text = Access_txtReadLines.txt_readfiles.Lines[0] + "\r\n" + txt_dir.Text + listbox_filesDir.SelectedItem.ToString();
+                    startCMD(@"C:\Users\williamyu\Desktop\Alexa Logs\Logcat\");
+                    this.Dispose();
+                    this.Close();
+                }              
+            }
+        }
+        private void startCMD(string adbPath)
+        {
+            try
+            {
+                Process p = new Process();
+                p.StartInfo.FileName = "cmd.exe";
+                p.StartInfo.WorkingDirectory = adbPath;
+                p.StartInfo.UseShellExecute = false;
+                p.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "\r\n" + "Path:" + adbPath, "startCMD", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+    }
+}
