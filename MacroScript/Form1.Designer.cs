@@ -204,10 +204,10 @@
         private System.Windows.Forms.PictureBox pic_reload;
         private System.Windows.Forms.PictureBox pic_PlayButton;
         private System.Windows.Forms.PictureBox pic_open;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv DropDown_Process;
         private System.Windows.Forms.Button btn_GetFileDir;
         public System.Windows.Forms.TextBox txt_readfiles;
         private System.Windows.Forms.Button btn_adb_click;
+        public Syncfusion.Windows.Forms.Tools.ComboBoxAdv DropDown_Process;
     }
 }
 

@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -50,15 +51,17 @@ namespace MacroScript
         {
             if (listbox_filesDir.SelectedIndex >= 0)
             {
+                string username = Environment.UserName;
                 Form f = Application.OpenForms["Form1"];
-                var Access_txtReadLines = ((Form1)f);
-                if (Access_txtReadLines.txt_readfiles.Lines.Length > 0)
+                var Access_Form1 = ((Form1)f);
+                if (Access_Form1.txt_readfiles.Lines.Length > 0)
                 {
-                    Access_txtReadLines.txt_readfiles.Text = Access_txtReadLines.txt_readfiles.Lines[0];
-                    Access_txtReadLines.txt_readfiles.Text = Access_txtReadLines.txt_readfiles.Lines[0] + "\r\n" + txt_dir.Text + listbox_filesDir.SelectedItem.ToString();
-                    startCMD(@"C:\Users\williamyu\Desktop\Alexa Logs\Logcat\");
+                    Access_Form1.txt_readfiles.Text = Access_Form1.txt_readfiles.Lines[0];
+                    Access_Form1.txt_readfiles.Text = Access_Form1.txt_readfiles.Lines[0] + "\r\n" + txt_dir.Text + listbox_filesDir.SelectedItem.ToString();
+                    startCMD(@"C:\Users\" + username + @"\Desktop\Alexa Logs\Logcat\");
                     this.Dispose();
                     this.Close();
+                    Access_Form1.DropDown_Process.Text = "cmd";
                 }              
             }
         }
@@ -68,7 +71,7 @@ namespace MacroScript
             {
                 Process p = new Process();
                 p.StartInfo.FileName = "cmd.exe";
-                p.StartInfo.WorkingDirectory = adbPath;
+                p.StartInfo.WorkingDirectory = adbPath;           
                 p.StartInfo.UseShellExecute = false;
                 p.Start();
             }

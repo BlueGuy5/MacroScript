@@ -73,14 +73,15 @@ namespace MacroScript
                 else
                 {
                     Form f = Application.OpenForms["Form1"];
-                    var Access_txtReadLines = ((Form1)f);
-                    if (Access_txtReadLines.txt_readfiles.Lines.Length > 0)
+                    var Access_Form1 = ((Form1)f);
+                    if (Access_Form1.txt_readfiles.Lines.Length > 0)
                     {
-                        Access_txtReadLines.txt_readfiles.Text = Access_txtReadLines.txt_readfiles.Lines[0];
-                        Access_txtReadLines.txt_readfiles.Text = Access_txtReadLines.txt_readfiles.Lines[0] + "\r\n" + txt_dir.Text + listbox_filesDir.SelectedItem.ToString();
+                        Access_Form1.txt_readfiles.Text = Access_Form1.txt_readfiles.Lines[0];
+                        Access_Form1.txt_readfiles.Text = Access_Form1.txt_readfiles.Lines[0] + "\r\n" + txt_dir.Text + listbox_filesDir.SelectedItem.ToString();
                         startCMD(txt_dir.Text + fw.Replace(@"\tools\MIC_FR_Delta3.xlsx",""));
                         this.Dispose();
                         this.Close();
+                        Access_Form1.DropDown_Process.Text = "cmd";
                     }
                 }
             }
