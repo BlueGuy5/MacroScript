@@ -58,7 +58,6 @@ namespace MacroScript
         }
         private void getProcessList()
         {
-            //list_ProcessName.Items.Clear();
             DropDown_Process.Items.Clear();
             foreach(Process proc in Process.GetProcesses())
             {
@@ -173,7 +172,6 @@ namespace MacroScript
             list_Whitelist.Add("cmd");
             list_Whitelist.Add("ttermpro");
             list_Whitelist.Add("BTC");
-            //list_blackList.Add("RuntimeBroker");
             return list_Whitelist;
         }
         private int checkProcDuplicate()
