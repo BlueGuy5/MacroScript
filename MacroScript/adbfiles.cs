@@ -24,7 +24,7 @@ namespace MacroScript
             Form f = Application.OpenForms["Form1"];
             var Access_txtReadLines = ((Form1)f);
             this.StartPosition = FormStartPosition.Manual;
-            this.Location = new Point(f.Location.X + f.Size.Width, f.Location.Y);
+            this.Location = new Point(f.Location.X + f.Size.Width - 300, f.Location.Y);
 
             try
             {
