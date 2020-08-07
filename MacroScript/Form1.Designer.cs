@@ -39,6 +39,7 @@
             this.DropDown_Process = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.btn_GetFileDir = new System.Windows.Forms.Button();
             this.btn_adb_click = new System.Windows.Forms.Button();
+            this.listBox_CustomMacro = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.pic_open)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pic_PlayButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pic_reload)).BeginInit();
@@ -79,11 +80,12 @@
             // 
             // list_txtFiles
             // 
-            this.list_txtFiles.Dock = System.Windows.Forms.DockStyle.Left;
+            this.list_txtFiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.list_txtFiles.FormattingEnabled = true;
-            this.list_txtFiles.Location = new System.Drawing.Point(0, 0);
+            this.list_txtFiles.Location = new System.Drawing.Point(2, 4);
             this.list_txtFiles.Name = "list_txtFiles";
-            this.list_txtFiles.Size = new System.Drawing.Size(232, 339);
+            this.list_txtFiles.Size = new System.Drawing.Size(232, 173);
             this.list_txtFiles.Sorted = true;
             this.list_txtFiles.TabIndex = 7;
             this.list_txtFiles.SelectedIndexChanged += new System.EventHandler(this.list_txtFiles_SelectedIndexChanged);
@@ -168,11 +170,23 @@
             this.btn_adb_click.UseVisualStyleBackColor = true;
             this.btn_adb_click.Click += new System.EventHandler(this.adb_Click);
             // 
+            // listBox_CustomMacro
+            // 
+            this.listBox_CustomMacro.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.listBox_CustomMacro.FormattingEnabled = true;
+            this.listBox_CustomMacro.Location = new System.Drawing.Point(2, 183);
+            this.listBox_CustomMacro.Name = "listBox_CustomMacro";
+            this.listBox_CustomMacro.Size = new System.Drawing.Size(231, 147);
+            this.listBox_CustomMacro.Sorted = true;
+            this.listBox_CustomMacro.TabIndex = 17;
+            this.listBox_CustomMacro.SelectedIndexChanged += new System.EventHandler(this.listBox_CustomMacro_SelectedIndexChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(486, 339);
+            this.Controls.Add(this.listBox_CustomMacro);
             this.Controls.Add(this.btn_adb_click);
             this.Controls.Add(this.btn_GetFileDir);
             this.Controls.Add(this.DropDown_Process);
@@ -208,6 +222,7 @@
         public System.Windows.Forms.TextBox txt_readfiles;
         private System.Windows.Forms.Button btn_adb_click;
         public Syncfusion.Windows.Forms.Tools.ComboBoxAdv DropDown_Process;
+        private System.Windows.Forms.ListBox listBox_CustomMacro;
     }
 }
 

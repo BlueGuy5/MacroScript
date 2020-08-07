@@ -43,6 +43,7 @@ namespace MacroScript
             }
             getProcessList();
             getTxtFiles();
+            getCustomMacroFiles();
         }
 
         private void DropDown_Process_Click(object sender, EventArgs e)
@@ -80,13 +81,16 @@ namespace MacroScript
             return files;
         }
         private void getTxtFiles()
-        {
+        {         
             try
             {
                 list_txtFiles.Items.Clear();
                 foreach (string file in retDir())
                 {
-                    list_txtFiles.Items.Add(file.Replace(txt_DirFiles.Text, ""));
+                    if (file.IndexOf("CustomMacro") < 0)
+                    {                     
+                        list_txtFiles.Items.Add(file.Replace(txt_DirFiles.Text, ""));
+                    }
                 }
             }
             catch(Exception ex)
@@ -94,9 +98,28 @@ namespace MacroScript
                 MessageBox.Show(ex.Message, "getTxtFiles()", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
+        private void getCustomMacroFiles()
+        {
+            try
+            {
+                listBox_CustomMacro.Items.Clear();
+                foreach (string file in retDir())
+                {
+                    if (file.IndexOf("CustomMacro") >= 0)
+                    {                    
+                        listBox_CustomMacro.Items.Add(file.Replace(txt_DirFiles.Text, ""));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "getCustomMacroFiles()", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+        }
         private void readTxtFiles(object sender, EventArgs e)
         {
-            string fullpath = txt_DirFiles.Text + list_txtFiles.SelectedItem;
+            //string fullpath = txt_DirFiles.Text + list_txtFiles.SelectedItem;
+            string fullpath = txt_DirFiles.Text + sender.ToString();
             var linesToSort = new List<string>();
             string[] lines = System.IO.File.ReadAllLines(fullpath);
 
@@ -138,12 +161,26 @@ namespace MacroScript
         {
             if (list_txtFiles.SelectedIndex >= 0)
             {
+                saveCustomMacro = false;
+                listBox_CustomMacro.SelectedItem = false;
                 txt_readfiles.Text = "";
                 Panel_readfile.Controls.Clear();
-                readTxtFiles(sender, e);
+                readTxtFiles(list_txtFiles.SelectedItem, e);
             }
         }
-      
+
+        private void listBox_CustomMacro_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBox_CustomMacro.SelectedIndex >= 0)
+            {
+                saveCustomMacro = true;
+                list_txtFiles.SelectedItem = false;
+                txt_readfiles.Text = "";
+                Panel_readfile.Controls.Clear();
+                readTxtFiles(listBox_CustomMacro.SelectedItem, e);
+            }
+        }
+
         private void pic_Reload_Click(object sender, EventArgs e)
         {
             getProcessList();
@@ -187,9 +224,11 @@ namespace MacroScript
             }
             return processNameCnt;
         }
+        bool saveCustomMacro = false;
         private void pic_PlayButton_Click(object sender, EventArgs e)
         {
-            string fullpath = txt_DirFiles.Text + list_txtFiles.SelectedItem;
+            //bool saveCustomMacro = false;
+            string fullpath = txt_DirFiles.Text + listBox_CustomMacro.SelectedItem;
             if (fullpath.IndexOf("CustomMacro") >= 0)
             {
                 if (checkProcDuplicate() <= 1)
@@ -208,7 +247,10 @@ namespace MacroScript
                     }
                     try
                     {
-                        System.IO.File.WriteAllLines(fullpath, txt_readfiles.Lines);
+                        if (saveCustomMacro == true)
+                        {
+                            System.IO.File.WriteAllLines(fullpath, txt_readfiles.Lines);
+                        }
                     }
                     catch (Exception ex)
                     {
