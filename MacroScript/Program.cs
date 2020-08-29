@@ -14,6 +14,7 @@ namespace MacroScript
         [STAThread]
         static void Main()
         {
+            //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzAxMTk2QDMxMzgyZTMyMmUzMGo1RkxyTXdsR2xXai9xL05zOGpyM0JZNkd1WWh4YTdVd202Y3FNSjlaalU9");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());

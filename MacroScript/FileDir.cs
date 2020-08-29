@@ -39,34 +39,36 @@ namespace MacroScript
         
         private void getFWnum()
         {
-            //string initialPath = @"C:\Users\williamyu\Documents\FW\";
-            string[] getFWdir = System.IO.Directory.GetDirectories(txt_dir.Text); 
-            listbox_filesDir.Items.Clear();
+            string[] getFWdir = System.IO.Directory.GetDirectories(txt_dir.Text);
+            DateTime Lastmodified;
+            listview_filesDir.Items.Clear();
             foreach(string fw in getFWdir)
             {
-                listbox_filesDir.Items.Add(fw.Replace(txt_dir.Text, ""));
+                //listbox_filesDir.Items.Add(fw.Replace(txt_dir.Text, ""));
+                Lastmodified = System.IO.File.GetLastWriteTime(fw);
+                listview_filesDir.Items.Add(fw.Replace(txt_dir.Text, "")).SubItems.Add(Lastmodified.ToString());
             }
         }
         private void getFiles(string fw)
         {
             string file = "MIC_FR_Delta3.xlsx";
-            //string initialPath = @"C:\Users\williamyu\Documents\FW\" + fw;
             string[] getFileDir = System.IO.Directory.GetFiles(txt_dir.Text + fw, file, System.IO.SearchOption.AllDirectories);
-            listbox_filesDir.Items.Clear();
-            foreach(string dir in getFileDir)
+            DateTime Lastmodified;
+            listview_filesDir.Items.Clear();
+            foreach (string dir in getFileDir)
             {
-                listbox_filesDir.Items.Add(dir.Replace(txt_dir.Text,""));
+                Lastmodified = System.IO.File.GetLastWriteTime(dir);
+                listview_filesDir.Items.Add(dir.Replace(txt_dir.Text, "")).SubItems.Add(Lastmodified.ToString());
             }
         }
-
-        private void listbox_filesDir_SelectedIndexChanged(object sender, EventArgs e)
+        private void listview_filesDir_SelectedIndexChanged(object sender, EventArgs e)
         {
             string fw = "";
-            if (listbox_filesDir.SelectedIndex >= 0)
+            if (listview_filesDir.SelectedIndices[0] >= 0)
             {
-                fw = listbox_filesDir.SelectedItem.ToString();
+                fw = listview_filesDir.SelectedItems[0].Text;
 
-                if (listbox_filesDir.SelectedItem.ToString().Length == 4)
+                if (listview_filesDir.SelectedItems[0].Text.Length == 4)
                 {
                     getFiles(fw);
                 }
@@ -77,8 +79,8 @@ namespace MacroScript
                     if (Access_txtReadLines.txt_readfiles.Lines.Length > 0)
                     {
                         Access_txtReadLines.txt_readfiles.Text = Access_txtReadLines.txt_readfiles.Lines[0];
-                        Access_txtReadLines.txt_readfiles.Text = Access_txtReadLines.txt_readfiles.Lines[0] + "\r\n" + txt_dir.Text + listbox_filesDir.SelectedItem.ToString();
-                        startCMD(txt_dir.Text + fw.Replace(@"\tools\MIC_FR_Delta3.xlsx",""));
+                        Access_txtReadLines.txt_readfiles.Text = Access_txtReadLines.txt_readfiles.Lines[0] + "\r\n" + txt_dir.Text + listview_filesDir.SelectedItems[0].Text;
+                        startCMD(txt_dir.Text + fw.Replace(@"\tools\MIC_FR_Delta3.xlsx", ""));
                         this.Dispose();
                         this.Close();
                     }
