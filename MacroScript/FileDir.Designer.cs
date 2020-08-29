@@ -29,23 +29,12 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FileDir));
-            this.listbox_filesDir = new System.Windows.Forms.ListBox();
             this.txt_dir = new System.Windows.Forms.TextBox();
             this.btn_Back = new System.Windows.Forms.Button();
+            this.listview_filesDir = new System.Windows.Forms.ListView();
+            this.clm_file = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.clm_date = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
-            // 
-            // listbox_filesDir
-            // 
-            this.listbox_filesDir.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listbox_filesDir.FormattingEnabled = true;
-            this.listbox_filesDir.HorizontalScrollbar = true;
-            this.listbox_filesDir.Location = new System.Drawing.Point(12, 31);
-            this.listbox_filesDir.Name = "listbox_filesDir";
-            this.listbox_filesDir.Size = new System.Drawing.Size(477, 264);
-            this.listbox_filesDir.TabIndex = 0;
-            this.listbox_filesDir.SelectedIndexChanged += new System.EventHandler(this.listbox_filesDir_SelectedIndexChanged);
             // 
             // txt_dir
             // 
@@ -64,14 +53,44 @@
             this.btn_Back.UseVisualStyleBackColor = true;
             this.btn_Back.Click += new System.EventHandler(this.btn_Back_Click);
             // 
+            // listview_filesDir
+            // 
+            this.listview_filesDir.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listview_filesDir.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.clm_file,
+            this.clm_date});
+            this.listview_filesDir.FullRowSelect = true;
+            this.listview_filesDir.GridLines = true;
+            this.listview_filesDir.HideSelection = false;
+            this.listview_filesDir.Location = new System.Drawing.Point(12, 30);
+            this.listview_filesDir.Name = "listview_filesDir";
+            this.listview_filesDir.Size = new System.Drawing.Size(413, 264);
+            this.listview_filesDir.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.listview_filesDir.TabIndex = 3;
+            this.listview_filesDir.UseCompatibleStateImageBehavior = false;
+            this.listview_filesDir.View = System.Windows.Forms.View.Details;
+            this.listview_filesDir.SelectedIndexChanged += new System.EventHandler(this.listview_filesDir_SelectedIndexChanged);
+            // 
+            // clm_file
+            // 
+            this.clm_file.Text = "File";
+            this.clm_file.Width = 221;
+            // 
+            // clm_date
+            // 
+            this.clm_date.Text = "Date";
+            this.clm_date.Width = 135;
+            // 
             // FileDir
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(507, 306);
+            this.ClientSize = new System.Drawing.Size(437, 306);
+            this.Controls.Add(this.listview_filesDir);
             this.Controls.Add(this.btn_Back);
             this.Controls.Add(this.txt_dir);
-            this.Controls.Add(this.listbox_filesDir);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FileDir";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -83,9 +102,10 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.ListBox listbox_filesDir;
         private System.Windows.Forms.TextBox txt_dir;
         private System.Windows.Forms.Button btn_Back;
+        private System.Windows.Forms.ListView listview_filesDir;
+        private System.Windows.Forms.ColumnHeader clm_file;
+        private System.Windows.Forms.ColumnHeader clm_date;
     }
 }

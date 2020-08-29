@@ -30,7 +30,9 @@
         {
             this.txt_dir = new System.Windows.Forms.TextBox();
             this.btn_Back = new System.Windows.Forms.Button();
-            this.listbox_filesDir = new System.Windows.Forms.ListBox();
+            this.listview_filesDir = new System.Windows.Forms.ListView();
+            this.clm_file = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.clm_date = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // txt_dir
@@ -49,25 +51,42 @@
             this.btn_Back.Text = "Back";
             this.btn_Back.UseVisualStyleBackColor = true;
             // 
-            // listbox_filesDir
+            // listview_filesDir
             // 
-            this.listbox_filesDir.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.listview_filesDir.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.listbox_filesDir.FormattingEnabled = true;
-            this.listbox_filesDir.HorizontalScrollbar = true;
-            this.listbox_filesDir.Location = new System.Drawing.Point(12, 41);
-            this.listbox_filesDir.Name = "listbox_filesDir";
-            this.listbox_filesDir.Size = new System.Drawing.Size(540, 264);
-            this.listbox_filesDir.TabIndex = 4;
-            this.listbox_filesDir.SelectedIndexChanged += new System.EventHandler(this.listbox_filesDir_SelectedIndexChanged);
+            this.listview_filesDir.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.clm_file,
+            this.clm_date});
+            this.listview_filesDir.FullRowSelect = true;
+            this.listview_filesDir.GridLines = true;
+            this.listview_filesDir.HideSelection = false;
+            this.listview_filesDir.Location = new System.Drawing.Point(12, 41);
+            this.listview_filesDir.Name = "listview_filesDir";
+            this.listview_filesDir.Size = new System.Drawing.Size(377, 264);
+            this.listview_filesDir.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.listview_filesDir.TabIndex = 5;
+            this.listview_filesDir.UseCompatibleStateImageBehavior = false;
+            this.listview_filesDir.View = System.Windows.Forms.View.Details;
+            this.listview_filesDir.SelectedIndexChanged += new System.EventHandler(this.listview_filesDir_SelectedIndexChanged);
+            // 
+            // clm_file
+            // 
+            this.clm_file.Text = "File";
+            this.clm_file.Width = 221;
+            // 
+            // clm_date
+            // 
+            this.clm_date.Text = "Date";
+            this.clm_date.Width = 125;
             // 
             // adbfiles
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(564, 317);
-            this.Controls.Add(this.listbox_filesDir);
+            this.ClientSize = new System.Drawing.Size(401, 317);
+            this.Controls.Add(this.listview_filesDir);
             this.Controls.Add(this.btn_Back);
             this.Controls.Add(this.txt_dir);
             this.Name = "adbfiles";
@@ -82,6 +101,8 @@
 
         private System.Windows.Forms.TextBox txt_dir;
         private System.Windows.Forms.Button btn_Back;
-        private System.Windows.Forms.ListBox listbox_filesDir;
+        private System.Windows.Forms.ListView listview_filesDir;
+        private System.Windows.Forms.ColumnHeader clm_file;
+        private System.Windows.Forms.ColumnHeader clm_date;
     }
 }

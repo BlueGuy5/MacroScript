@@ -40,16 +40,17 @@ namespace MacroScript
         private void adbGetPacks()
         {
             var getFileDir = System.IO.Directory.GetFiles(txt_dir.Text,"*.*", System.IO.SearchOption.AllDirectories).Where(s => s.EndsWith(".apk",StringComparison.OrdinalIgnoreCase));
-            listbox_filesDir.Items.Clear();
+            DateTime Lastmodified;
+            listview_filesDir.Items.Clear();
             foreach (string dir in getFileDir)
             {
-                listbox_filesDir.Items.Add(dir.Replace(txt_dir.Text, ""));
+                Lastmodified = System.IO.File.GetLastWriteTime(dir);
+                listview_filesDir.Items.Add(dir.Replace(txt_dir.Text, "")).SubItems.Add(Lastmodified.ToString());
             }
         }
-
-        private void listbox_filesDir_SelectedIndexChanged(object sender, EventArgs e)
+        private void listview_filesDir_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listbox_filesDir.SelectedIndex >= 0)
+            if (listview_filesDir.SelectedIndices[0] >= 0)
             {
                 string username = Environment.UserName;
                 Form f = Application.OpenForms["Form1"];
@@ -57,12 +58,12 @@ namespace MacroScript
                 if (Access_Form1.txt_readfiles.Lines.Length > 0)
                 {
                     Access_Form1.txt_readfiles.Text = Access_Form1.txt_readfiles.Lines[0];
-                    Access_Form1.txt_readfiles.Text = Access_Form1.txt_readfiles.Lines[0] + "\r\n" + txt_dir.Text + listbox_filesDir.SelectedItem.ToString();
+                    Access_Form1.txt_readfiles.Text = Access_Form1.txt_readfiles.Lines[0] + "\r\n" + txt_dir.Text + listview_filesDir.SelectedItems[0].Text;
                     startCMD(@"C:\Users\" + username + @"\Desktop\Alexa Logs\Logcat\");
                     this.Dispose();
                     this.Close();
                     Access_Form1.DropDown_Process.Text = "cmd";
-                }              
+                }
             }
         }
         private void startCMD(string adbPath)
