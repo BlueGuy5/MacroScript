@@ -58,7 +58,7 @@ namespace MacroScript
                 if (Access_Form1.txt_readfiles.Lines.Length > 0)
                 {
                     Access_Form1.txt_readfiles.Text = Access_Form1.txt_readfiles.Lines[0];
-                    Access_Form1.txt_readfiles.Text = Access_Form1.txt_readfiles.Lines[0] + "\r\n" + txt_dir.Text + listview_filesDir.SelectedItems[0].Text;
+                    Access_Form1.txt_readfiles.Text = Access_Form1.txt_readfiles.Lines[0] + "\r\n" + "\"" + txt_dir.Text + listview_filesDir.SelectedItems[0].Text + "\"";
                     startCMD(@"C:\Users\" + username + @"\Desktop\Alexa Logs\Logcat\");
                     this.Dispose();
                     this.Close();

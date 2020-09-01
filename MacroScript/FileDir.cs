@@ -79,7 +79,7 @@ namespace MacroScript
                     if (Access_txtReadLines.txt_readfiles.Lines.Length > 0)
                     {
                         Access_txtReadLines.txt_readfiles.Text = Access_txtReadLines.txt_readfiles.Lines[0];
-                        Access_txtReadLines.txt_readfiles.Text = Access_txtReadLines.txt_readfiles.Lines[0] + "\r\n" + txt_dir.Text + listview_filesDir.SelectedItems[0].Text;
+                        Access_txtReadLines.txt_readfiles.Text = Access_txtReadLines.txt_readfiles.Lines[0] + "\r\n" + "\"" + txt_dir.Text + listview_filesDir.SelectedItems[0].Text + "\"";
                         startCMD(txt_dir.Text + fw.Replace(@"\tools\MIC_FR_Delta3.xlsx", ""));
                         this.Dispose();
                         this.Close();
