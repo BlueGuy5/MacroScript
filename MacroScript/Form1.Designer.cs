@@ -52,9 +52,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.Panel_readfile.AutoScroll = true;
+            this.Panel_readfile.ForeColor = System.Drawing.Color.White;
             this.Panel_readfile.Location = new System.Drawing.Point(240, 55);
             this.Panel_readfile.Name = "Panel_readfile";
-            this.Panel_readfile.Size = new System.Drawing.Size(205, 122);
+            this.Panel_readfile.Size = new System.Drawing.Size(289, 154);
             this.Panel_readfile.TabIndex = 1;
             // 
             // txt_readfiles
@@ -62,30 +63,33 @@
             this.txt_readfiles.AllowDrop = true;
             this.txt_readfiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_readfiles.Location = new System.Drawing.Point(239, 183);
+            this.txt_readfiles.BackColor = System.Drawing.Color.Silver;
+            this.txt_readfiles.Location = new System.Drawing.Point(239, 215);
             this.txt_readfiles.Multiline = true;
             this.txt_readfiles.Name = "txt_readfiles";
             this.txt_readfiles.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txt_readfiles.Size = new System.Drawing.Size(206, 148);
+            this.txt_readfiles.Size = new System.Drawing.Size(290, 148);
             this.txt_readfiles.TabIndex = 2;
             // 
             // txt_DirFiles
             // 
             this.txt_DirFiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.txt_DirFiles.BackColor = System.Drawing.Color.Silver;
             this.txt_DirFiles.Location = new System.Drawing.Point(239, 2);
             this.txt_DirFiles.Name = "txt_DirFiles";
-            this.txt_DirFiles.Size = new System.Drawing.Size(206, 20);
+            this.txt_DirFiles.Size = new System.Drawing.Size(290, 20);
             this.txt_DirFiles.TabIndex = 3;
             // 
             // list_txtFiles
             // 
             this.list_txtFiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.list_txtFiles.BackColor = System.Drawing.Color.Silver;
             this.list_txtFiles.FormattingEnabled = true;
             this.list_txtFiles.Location = new System.Drawing.Point(2, 4);
             this.list_txtFiles.Name = "list_txtFiles";
-            this.list_txtFiles.Size = new System.Drawing.Size(232, 173);
+            this.list_txtFiles.Size = new System.Drawing.Size(232, 199);
             this.list_txtFiles.Sorted = true;
             this.list_txtFiles.TabIndex = 7;
             this.list_txtFiles.SelectedIndexChanged += new System.EventHandler(this.list_txtFiles_SelectedIndexChanged);
@@ -96,7 +100,7 @@
             this.pic_open.BackgroundImage = global::MacroScript.Properties.Resources.folderimg;
             this.pic_open.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pic_open.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pic_open.Location = new System.Drawing.Point(451, 2);
+            this.pic_open.Location = new System.Drawing.Point(535, 2);
             this.pic_open.Name = "pic_open";
             this.pic_open.Size = new System.Drawing.Size(28, 18);
             this.pic_open.TabIndex = 13;
@@ -109,7 +113,7 @@
             this.pic_PlayButton.BackgroundImage = global::MacroScript.Properties.Resources.playbutton;
             this.pic_PlayButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pic_PlayButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pic_PlayButton.Location = new System.Drawing.Point(451, 183);
+            this.pic_PlayButton.Location = new System.Drawing.Point(535, 215);
             this.pic_PlayButton.Name = "pic_PlayButton";
             this.pic_PlayButton.Size = new System.Drawing.Size(30, 21);
             this.pic_PlayButton.TabIndex = 12;
@@ -122,7 +126,7 @@
             this.pic_reload.BackgroundImage = global::MacroScript.Properties.Resources.macros_512;
             this.pic_reload.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.pic_reload.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pic_reload.Location = new System.Drawing.Point(451, 28);
+            this.pic_reload.Location = new System.Drawing.Point(535, 28);
             this.pic_reload.Name = "pic_reload";
             this.pic_reload.Size = new System.Drawing.Size(28, 21);
             this.pic_reload.TabIndex = 11;
@@ -134,11 +138,11 @@
             this.DropDown_Process.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.DropDown_Process.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.DropDown_Process.BeforeTouchSize = new System.Drawing.Size(206, 21);
+            this.DropDown_Process.BeforeTouchSize = new System.Drawing.Size(290, 19);
             this.DropDown_Process.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(218)))), ((int)(((byte)(218)))));
             this.DropDown_Process.Location = new System.Drawing.Point(239, 28);
             this.DropDown_Process.Name = "DropDown_Process";
-            this.DropDown_Process.Size = new System.Drawing.Size(206, 21);
+            this.DropDown_Process.Size = new System.Drawing.Size(290, 19);
             this.DropDown_Process.Sorted = true;
             this.DropDown_Process.Style = Syncfusion.Windows.Forms.VisualStyle.Office2016Black;
             this.DropDown_Process.TabIndex = 14;
@@ -150,7 +154,7 @@
             // btn_GetFileDir
             // 
             this.btn_GetFileDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_GetFileDir.Location = new System.Drawing.Point(449, 210);
+            this.btn_GetFileDir.Location = new System.Drawing.Point(533, 242);
             this.btn_GetFileDir.Name = "btn_GetFileDir";
             this.btn_GetFileDir.Size = new System.Drawing.Size(32, 28);
             this.btn_GetFileDir.TabIndex = 15;
@@ -162,7 +166,7 @@
             // 
             this.btn_adb_click.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_adb_click.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_adb_click.Location = new System.Drawing.Point(449, 244);
+            this.btn_adb_click.Location = new System.Drawing.Point(533, 276);
             this.btn_adb_click.Name = "btn_adb_click";
             this.btn_adb_click.Size = new System.Drawing.Size(32, 28);
             this.btn_adb_click.TabIndex = 16;
@@ -173,8 +177,9 @@
             // listBox_CustomMacro
             // 
             this.listBox_CustomMacro.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.listBox_CustomMacro.BackColor = System.Drawing.Color.Silver;
             this.listBox_CustomMacro.FormattingEnabled = true;
-            this.listBox_CustomMacro.Location = new System.Drawing.Point(2, 183);
+            this.listBox_CustomMacro.Location = new System.Drawing.Point(2, 215);
             this.listBox_CustomMacro.Name = "listBox_CustomMacro";
             this.listBox_CustomMacro.Size = new System.Drawing.Size(231, 147);
             this.listBox_CustomMacro.Sorted = true;
@@ -185,7 +190,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(486, 339);
+            this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.ClientSize = new System.Drawing.Size(570, 371);
             this.Controls.Add(this.listBox_CustomMacro);
             this.Controls.Add(this.btn_adb_click);
             this.Controls.Add(this.btn_GetFileDir);
