@@ -72,7 +72,7 @@ namespace MacroScript
                     }
                 }
             }
-            DropDown_Process.MaxDropDownItems = this.Height / 20;
+            DropDown_Process.MaxDropDownItems = DropDown_Process.Items.Count;
         }
 
         private string[] retDir()
@@ -166,6 +166,7 @@ namespace MacroScript
                 txt_readfiles.Text = "";
                 Panel_readfile.Controls.Clear();
                 readTxtFiles(list_txtFiles.SelectedItem, e);
+                DropDown_Process.Text = "ttermpro";
             }
         }
 

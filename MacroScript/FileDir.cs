@@ -83,6 +83,7 @@ namespace MacroScript
                         startCMD(txt_dir.Text + fw.Replace(@"\tools\MIC_FR_Delta3.xlsx", ""));
                         this.Dispose();
                         this.Close();
+                        Access_txtReadLines.DropDown_Process.Text = "cmd";
                     }
                 }
             }
