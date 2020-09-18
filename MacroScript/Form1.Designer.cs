@@ -138,11 +138,11 @@
             this.DropDown_Process.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.DropDown_Process.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
-            this.DropDown_Process.BeforeTouchSize = new System.Drawing.Size(290, 19);
+            this.DropDown_Process.BeforeTouchSize = new System.Drawing.Size(290, 21);
             this.DropDown_Process.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(218)))), ((int)(((byte)(218)))));
             this.DropDown_Process.Location = new System.Drawing.Point(239, 28);
             this.DropDown_Process.Name = "DropDown_Process";
-            this.DropDown_Process.Size = new System.Drawing.Size(290, 19);
+            this.DropDown_Process.Size = new System.Drawing.Size(290, 21);
             this.DropDown_Process.Sorted = true;
             this.DropDown_Process.Style = Syncfusion.Windows.Forms.VisualStyle.Office2016Black;
             this.DropDown_Process.TabIndex = 14;
