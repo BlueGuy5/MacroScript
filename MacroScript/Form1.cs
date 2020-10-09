@@ -225,10 +225,8 @@ namespace MacroScript
             }
             return processNameCnt;
         }
-        bool saveCustomMacro = false;
-        private void pic_PlayButton_Click(object sender, EventArgs e)
+        private void playFunction()
         {
-            //bool saveCustomMacro = false;
             string fullpath = txt_DirFiles.Text + listBox_CustomMacro.SelectedItem;
             if (fullpath.IndexOf("CustomMacro") >= 0)
             {
@@ -266,6 +264,27 @@ namespace MacroScript
             else
             {
                 MessageBox.Show("Must Select CustomMacro.txt", "Wrong File", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        } 
+        bool saveCustomMacro = false;
+        private void pic_PlayButton_Click(object sender, EventArgs e)
+        {
+            DialogResult msgresults;
+            if (DropDown_Process.Text != "cmd")
+            {
+                msgresults = MessageBox.Show("Target Process: " + DropDown_Process.Text + "\r\n" + "Press OK to continue.", "Target Process is not CMD", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+                if (msgresults == DialogResult.OK)
+                {
+                    playFunction();
+                }
+                else
+                {
+                    MessageBox.Show("User Hit Cancel", "Stopping Script", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else if(DropDown_Process.Text == "cmd")
+            {
+                playFunction();
             }
         }
         private void writeCMD(object sender, EventArgs e)
