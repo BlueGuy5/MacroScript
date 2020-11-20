@@ -41,11 +41,14 @@
             this.btn_adb_click = new System.Windows.Forms.Button();
             this.listBox_CustomMacro = new System.Windows.Forms.ListBox();
             this.gb_Options = new System.Windows.Forms.GroupBox();
+            this.gb_Ports = new System.Windows.Forms.GroupBox();
+            this.txt_Ports = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pic_open)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pic_PlayButton)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pic_reload)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.DropDown_Process)).BeginInit();
             this.gb_Options.SuspendLayout();
+            this.gb_Ports.SuspendLayout();
             this.SuspendLayout();
             // 
             // Panel_readfile
@@ -194,6 +197,7 @@
             // 
             // gb_Options
             // 
+            this.gb_Options.Controls.Add(this.gb_Ports);
             this.gb_Options.Controls.Add(this.pic_reload);
             this.gb_Options.Controls.Add(this.btn_adb_click);
             this.gb_Options.Controls.Add(this.pic_open);
@@ -207,6 +211,27 @@
             this.gb_Options.TabIndex = 18;
             this.gb_Options.TabStop = false;
             this.gb_Options.Text = "Options";
+            // 
+            // gb_Ports
+            // 
+            this.gb_Ports.Controls.Add(this.txt_Ports);
+            this.gb_Ports.ForeColor = System.Drawing.Color.White;
+            this.gb_Ports.Location = new System.Drawing.Point(6, 55);
+            this.gb_Ports.Name = "gb_Ports";
+            this.gb_Ports.Size = new System.Drawing.Size(66, 154);
+            this.gb_Ports.TabIndex = 17;
+            this.gb_Ports.TabStop = false;
+            this.gb_Ports.Text = "Ports";
+            // 
+            // txt_Ports
+            // 
+            this.txt_Ports.BackColor = System.Drawing.Color.Silver;
+            this.txt_Ports.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txt_Ports.Location = new System.Drawing.Point(3, 16);
+            this.txt_Ports.Multiline = true;
+            this.txt_Ports.Name = "txt_Ports";
+            this.txt_Ports.Size = new System.Drawing.Size(60, 135);
+            this.txt_Ports.TabIndex = 0;
             // 
             // Form1
             // 
@@ -222,6 +247,7 @@
             this.Controls.Add(this.txt_readfiles);
             this.Controls.Add(this.Panel_readfile);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MacroScript";
@@ -231,6 +257,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pic_reload)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DropDown_Process)).EndInit();
             this.gb_Options.ResumeLayout(false);
+            this.gb_Ports.ResumeLayout(false);
+            this.gb_Ports.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -249,6 +277,8 @@
         public Syncfusion.Windows.Forms.Tools.ComboBoxAdv DropDown_Process;
         private System.Windows.Forms.ListBox listBox_CustomMacro;
         private System.Windows.Forms.GroupBox gb_Options;
+        private System.Windows.Forms.GroupBox gb_Ports;
+        private System.Windows.Forms.TextBox txt_Ports;
     }
 }
 
