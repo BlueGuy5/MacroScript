@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO.Ports;
 
 namespace MacroScript
 {
@@ -28,6 +29,7 @@ namespace MacroScript
         public Form1()
         {
             InitializeComponent();
+            this.KeyDown += new KeyEventHandler(OpenSerialTerminal);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -41,11 +43,36 @@ namespace MacroScript
             {
                 MessageBox.Show(ex.Message, txt_DirFiles.Text + " Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
+            getPorts();
             getProcessList();
             getTxtFiles();
             getCustomMacroFiles();
         }
-
+        SerialTerminal ST = new SerialTerminal();
+        private void OpenSerialTerminal(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.F1)
+            {
+                ST.Show();
+                ST.BringToFront();
+            }
+        }
+        private void getPorts()
+        {
+            try
+            {
+                string[] ports = SerialPort.GetPortNames();
+                txt_Ports.Text = string.Empty;
+                foreach(string port in ports)
+                {
+                    txt_Ports.AppendText(port + "\r\n");
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "getPorts()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private void DropDown_Process_Click(object sender, EventArgs e)
         {
             getProcessList();
@@ -184,6 +211,7 @@ namespace MacroScript
 
         private void pic_Reload_Click(object sender, EventArgs e)
         {
+            getPorts();
             getProcessList();
             getTxtFiles();
         }     
