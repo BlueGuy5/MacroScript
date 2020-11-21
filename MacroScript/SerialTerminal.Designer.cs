@@ -49,12 +49,12 @@
             this.txt_serialLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_serialLog.Location = new System.Drawing.Point(12, 108);
+            this.txt_serialLog.Location = new System.Drawing.Point(0, 108);
             this.txt_serialLog.Multiline = true;
             this.txt_serialLog.Name = "txt_serialLog";
             this.txt_serialLog.ReadOnly = true;
             this.txt_serialLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txt_serialLog.Size = new System.Drawing.Size(776, 304);
+            this.txt_serialLog.Size = new System.Drawing.Size(834, 467);
             this.txt_serialLog.TabIndex = 0;
             // 
             // groupBox1
@@ -66,7 +66,7 @@
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(800, 102);
+            this.groupBox1.Size = new System.Drawing.Size(834, 102);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Settings";
@@ -149,15 +149,15 @@
             // 
             this.txt_SendCommand.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_SendCommand.Location = new System.Drawing.Point(12, 418);
+            this.txt_SendCommand.Location = new System.Drawing.Point(12, 581);
             this.txt_SendCommand.Name = "txt_SendCommand";
-            this.txt_SendCommand.Size = new System.Drawing.Size(643, 20);
+            this.txt_SendCommand.Size = new System.Drawing.Size(677, 20);
             this.txt_SendCommand.TabIndex = 2;
             // 
             // btn_SendCommand
             // 
             this.btn_SendCommand.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_SendCommand.Location = new System.Drawing.Point(661, 417);
+            this.btn_SendCommand.Location = new System.Drawing.Point(695, 580);
             this.btn_SendCommand.Name = "btn_SendCommand";
             this.btn_SendCommand.Size = new System.Drawing.Size(127, 20);
             this.btn_SendCommand.TabIndex = 3;
@@ -170,7 +170,7 @@
             this.AcceptButton = this.btn_SendCommand;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(834, 613);
             this.Controls.Add(this.btn_SendCommand);
             this.Controls.Add(this.txt_SendCommand);
             this.Controls.Add(this.groupBox1);

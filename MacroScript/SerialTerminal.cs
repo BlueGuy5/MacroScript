@@ -7,6 +7,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace MacroScript
@@ -26,12 +27,11 @@ namespace MacroScript
         }
         SerialPort port;
         string RadioBaudrate;
-        string Port_Message;
-        int linecnt = 0;
+        private delegate void SafeCallDelegate(string text);
+
         private SerialPort OpenPorts()
         {
             port = new SerialPort(txt_ComPort.Text, int.Parse(RadioBaudrate), Parity.None, 8, StopBits.One);
-            //port.Open();
             return port;
         }
         private void serialCommands()
@@ -46,33 +46,30 @@ namespace MacroScript
                 MessageBox.Show(ex.Message, "serialCommands()", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        private void ReadSerialBuffer(string text)
         {
-            Port_Message = port.ReadExisting();
-            linecnt++;
-        }
-        bool KeepAlive = true;
-        private async Task readports()
-        {
-            KeepAlive = true;
-            int getLineNum = 0;
             try
             {
-                while (KeepAlive == true)
+                if (txt_serialLog.InvokeRequired)
                 {
-                    await Task.Delay(1);
-                    if (linecnt > getLineNum)
-                    {
-                        txt_serialLog.AppendText(Port_Message + "\r");
-                        getLineNum = linecnt;
-                    }
+                    var d = new SafeCallDelegate(ReadSerialBuffer);
+                    txt_serialLog.Invoke(d, new object[] { text });
+                }
+                else
+                {
+                    txt_serialLog.AppendText(text + "\r");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "readports()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "ReadSerialBuffer()", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        public void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            ReadSerialBuffer(port.ReadExisting());
+        }
+ 
         private void btn_SendCommand_Click(object sender, EventArgs e)
         {
             try
@@ -84,15 +81,14 @@ namespace MacroScript
                 MessageBox.Show(ex.Message, "Unable to Write to Serial Buffer", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private async void btn_Connect_Click(object sender, EventArgs e)
+        private void btn_Connect_Click(object sender, EventArgs e)
         {
             try
             {
                 OpenPorts();
                 serialCommands();
-                await readports();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Connecting Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -101,7 +97,6 @@ namespace MacroScript
         {
             try
             {
-                KeepAlive = false;
                 port.Close();
                 port.Dispose();
             }
