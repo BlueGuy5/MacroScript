@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
+using System.IO;
 
 namespace MacroScript
 {
@@ -24,14 +26,42 @@ namespace MacroScript
 
         private void SerialTerminal_Load(object sender, EventArgs e)
         {
-            FillPort();
-            TreeView_Macro();
+            try
+            {
+                FillPort();
+                TreeView_Macro();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Main()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             /*
             for(int i = 0; i< 100; i++)
             {
                 txt_serialLog.AppendText("test" + "\r\n");
             }
             */
+        }
+        private void radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked == true)
+            {
+                radioButton2.Checked = false;
+                radioButton3.Checked = false;
+                RadioBaudrate = radioButton1.Text;
+            }
+            else if (radioButton2.Checked == true)
+            {
+                radioButton1.Checked = false;
+                radioButton3.Checked = false;
+                RadioBaudrate = radioButton2.Text;
+            }
+            else if (radioButton3.Checked == true)
+            {
+                radioButton1.Checked = false;
+                radioButton2.Checked = false;
+                RadioBaudrate = txt_CustomBaudrate.Text;
+            }
         }
         private string[] getPorts()
         {
@@ -93,10 +123,7 @@ namespace MacroScript
                 {
                     if (file.IndexOf("CustomMacro") < 0)
                     {
-                        List_files.Add(file.Replace(@"C:\Users\" + Environment.UserName + @"\Documents\MacroScript\", ""));
-                        //add root node
-                        //rootnodes = new TreeNode(file.Replace(@"C:\Users\" + Environment.UserName + @"\Documents\MacroScript\", ""));
-                        //treeView_Files.Nodes.Add(rootnodes);                  
+                        List_files.Add(file.Replace(@"C:\Users\" + Environment.UserName + @"\Documents\MacroScript\", ""));           
                     }
                 }
                 List_files.Sort();
@@ -105,7 +132,6 @@ namespace MacroScript
                     rootnodes = new TreeNode(file.Replace(@"C:\Users\" + Environment.UserName + @"\Documents\MacroScript\", ""));
                     treeView_Files.Nodes.Add(rootnodes);  
                 }
-
                 //add child node
                 string path = @"C:\Users\" + Environment.UserName + @"\Documents\MacroScript\";
                 int i = 1;
@@ -122,7 +148,6 @@ namespace MacroScript
                             ListLines.Add(line);
                         }
                         ListLines.Sort();
-
                         //open textfile and read
                         foreach (string line in ListLines)
                         {
@@ -132,12 +157,12 @@ namespace MacroScript
                         i++;
                     }
                 }
-                List_AllCommands.Sort();
+                List_AllCommands.Sort();            
                 foreach (string line in List_AllCommands)
                 {
                     treeView_Files.Nodes[0].Nodes.Add(line);
                 }
-                treeView_Files.ExpandAll(); //Expand all nodes
+                //treeView_Files.ExpandAll(); //Expand all nodes
             }
             catch (Exception ex)
             {
@@ -148,11 +173,10 @@ namespace MacroScript
         {
             try
             {
-                if (e.Node.Nodes.Count < 1)
+                if (e.Node.Nodes.Count < 1 && e.Node.IsSelected == true)
                 {
+                    port.WriteLine("\r");
                     port.Write(e.Node.Text + "\r");
-                    //txt_SendCommand.Text = e.Node.Text;
-                    //btn_SendCommand_Click(sender, e);
                 }
             }
             catch(Exception ex)
@@ -164,6 +188,52 @@ namespace MacroScript
         {
             TreeView_Macro();
         }
+        bool WriteToFile = false;
+        string filename;
+        private StreamWriter sw;
+        private void FileLogPath()
+        {
+            //OpenFileDialog OpenFile = new OpenFileDialog();
+            SaveFileDialog SaveFile = new SaveFileDialog();
+            SaveFile.InitialDirectory = Environment.SpecialFolder.DesktopDirectory.ToString();
+            var dlgOK = SaveFile.ShowDialog();
+            if (dlgOK == DialogResult.OK)
+            {
+                WriteToFile = true;
+                filename = SaveFile.FileName;
+                sw = new StreamWriter(filename);
+                lbl_LogStatus.ForeColor = Color.Green;
+                lbl_LogStatus.Text = "Logging";        
+            }
+        }
+        private void btn_log_Click(object sender, EventArgs e)
+        {
+            if (WriteToFile == false)
+            {
+                FileLogPath();
+            }
+            else if(WriteToFile == true)
+            {
+                sw.Close();
+                WriteToFile = false;
+                lbl_LogStatus.Text = "";
+            }
+        }
+        private void AppendToLog(string text)
+        {
+            try
+            {
+                sw.WriteLine(text);
+            }
+            catch(Exception ex)
+            {
+                lbl_Status.ForeColor = Color.Red;
+                lbl_Status.Text = ex.Message;
+                sw.Close();
+                lbl_LogStatus.Text = "";
+            }
+        }
+
         SerialPort port;
         string RadioBaudrate;
         private delegate void SafeCallDelegate(string text);
@@ -179,29 +249,44 @@ namespace MacroScript
             {
                 port.DataReceived += new SerialDataReceivedEventHandler(port_DataReceived);
                 port.Open();
-                statusBarAdv1.ForeColor = Color.Green;
-                lbl_Status.Text = "Connected";
                 lbl_ComPort.Text = txt_ComPort.Text;
                 lbl_Baudrate.Text = RadioBaudrate;
-                
+                btn_Connect.Enabled = false;
+                btn_Close.Enabled = true;
+                statusBarAdv1.ForeColor = Color.Green;
+                lbl_Status.ForeColor = Color.Green;
+                lbl_Status.Text = "Connected";
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "serialCommands()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                btn_Close.Enabled = false;
+                btn_Connect.Enabled = true;
+                statusBarAdv1.ForeColor = Color.Red;
+                lbl_Status.Text = "Disconnected";
             }
         }
         private void ReadSerialBuffer(string text)
-        {
+        {            
             try
             {
-                if (txt_serialLog.InvokeRequired)
+                if (txt_RichSerialLog.InvokeRequired)
                 {
                     var d = new SafeCallDelegate(ReadSerialBuffer);
-                    txt_serialLog.Invoke(d, new object[] { text });
+                    //txt_serialLog.Invoke(d, new object[] { text });
+                    txt_RichSerialLog.BeginInvoke(d, new object[] { text });
                 }
                 else
                 {
-                    txt_serialLog.AppendText(text + "\r");
+                    if (text.Length > 0)
+                    {
+                        string SerialOutput = text + "\r";
+                        txt_RichSerialLog.AppendText(SerialOutput);
+                        if (WriteToFile == true)
+                        {
+                            AppendToLog(SerialOutput.Trim());
+                        }
+                    }
                 }
             }
             catch (Exception ex)
@@ -211,7 +296,10 @@ namespace MacroScript
         }
         public void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            ReadSerialBuffer(port.ReadExisting());
+            ReadSerialBuffer(port.ReadExisting());         
+            txt_RichSerialLog.SelectionStart = txt_RichSerialLog.TextLength;
+            txt_RichSerialLog.ScrollToCaret();
+            Thread.Sleep(1);
         }
         private void SendCommand(object sender, KeyEventArgs e)
         {
@@ -219,6 +307,7 @@ namespace MacroScript
             {
                 try
                 {
+                    port.WriteLine("\r");
                     port.WriteLine(txt_SendCommand.Text + "\r");
                     txt_SendCommand.Text = string.Empty;
                 }
@@ -234,8 +323,6 @@ namespace MacroScript
             {
                 OpenPorts();
                 serialCommands();
-                btn_Connect.Enabled = false;
-                btn_Close.Enabled = true;
             }
             catch (Exception ex)
             {
@@ -249,41 +336,25 @@ namespace MacroScript
             try
             {
                 port.Close();
-                port.Dispose();
                 statusBarAdv1.ForeColor = Color.Red;
+                lbl_Status.ForeColor = Color.Red;
                 lbl_Status.Text = "Disconnected";
                 lbl_ComPort.Text = string.Empty;
                 lbl_Baudrate.Text = string.Empty;
                 btn_Close.Enabled = false;
                 btn_Connect.Enabled = true;
+                if (WriteToFile == true)
+                {
+                    sw.Close();
+                    WriteToFile = false;
+                    lbl_LogStatus.Text = "";
+                }
             }
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message, "Close Connection Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 btn_Connect.Enabled = false;
                 btn_Close.Enabled = true;
-            }
-        }
-
-        private void radioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioButton1.Checked == true)
-            {
-                radioButton2.Checked = false;
-                radioButton3.Checked = false;
-                RadioBaudrate = radioButton1.Text;
-            }
-            else if (radioButton2.Checked == true)
-            {
-                radioButton1.Checked = false;
-                radioButton3.Checked = false;
-                RadioBaudrate = radioButton2.Text;
-            }
-            else if (radioButton3.Checked == true)
-            {
-                radioButton1.Checked = false;
-                radioButton2.Checked = false;
-                RadioBaudrate = txt_CustomBaudrate.Text;
             }
         }
         private void HideSerialTerminal(object sender, KeyEventArgs e)
@@ -305,7 +376,7 @@ namespace MacroScript
                 lbl_Status.Text = "Disconnected";
                 lbl_ComPort.Text = string.Empty;
                 lbl_Baudrate.Text = string.Empty;
-                txt_serialLog.Text = string.Empty;
+                txt_RichSerialLog.Text = string.Empty;
             }
             catch (Exception ex)
             {

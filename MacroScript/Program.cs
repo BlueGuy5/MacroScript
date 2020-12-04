@@ -14,10 +14,16 @@ namespace MacroScript
         [STAThread]
         static void Main()
         {
-            //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("MzAxMTk2QDMxMzgyZTMyMmUzMGo1RkxyTXdsR2xXai9xL05zOGpyM0JZNkd1WWh4YTdVd202Y3FNSjlaalU9");
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new Form1());
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Exception at Program Main", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
