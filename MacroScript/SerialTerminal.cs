@@ -28,19 +28,12 @@ namespace MacroScript
         {
             try
             {
-                FillPort();
                 TreeView_Macro();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Main()", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            /*
-            for(int i = 0; i< 100; i++)
-            {
-                txt_serialLog.AppendText("test" + "\r\n");
-            }
-            */
         }
         private void radioButton_CheckedChanged(object sender, EventArgs e)
         {
@@ -68,7 +61,7 @@ namespace MacroScript
             string[] ports = SerialPort.GetPortNames();
             return ports;
         }
-        private void FillPort()
+        private void FillPort(object sender, EventArgs e)
         {
             try
             {
@@ -175,7 +168,7 @@ namespace MacroScript
             {
                 if (e.Node.Nodes.Count < 1 && e.Node.IsSelected == true)
                 {
-                    port.WriteLine("\r");
+                    port.Write("?");
                     port.Write(e.Node.Text + "\r");
                 }
             }
@@ -273,7 +266,6 @@ namespace MacroScript
                 if (txt_RichSerialLog.InvokeRequired)
                 {
                     var d = new SafeCallDelegate(ReadSerialBuffer);
-                    //txt_serialLog.Invoke(d, new object[] { text });
                     txt_RichSerialLog.BeginInvoke(d, new object[] { text });
                 }
                 else
@@ -296,10 +288,17 @@ namespace MacroScript
         }
         public void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            ReadSerialBuffer(port.ReadExisting());         
-            txt_RichSerialLog.SelectionStart = txt_RichSerialLog.TextLength;
-            txt_RichSerialLog.ScrollToCaret();
-            Thread.Sleep(1);
+            try
+            {
+                ReadSerialBuffer(port.ReadExisting());
+                txt_RichSerialLog.SelectionStart = txt_RichSerialLog.TextLength;
+                txt_RichSerialLog.ScrollToCaret();
+                Thread.Sleep(1);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "port_DataReceived", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void SendCommand(object sender, KeyEventArgs e)
         {
@@ -307,8 +306,8 @@ namespace MacroScript
             {
                 try
                 {
-                    port.WriteLine("\r");
-                    port.WriteLine(txt_SendCommand.Text + "\r");
+                    port.Write("?");
+                    port.Write(txt_SendCommand.Text + "\r");
                     txt_SendCommand.Text = string.Empty;
                 }
                 catch (Exception ex)
