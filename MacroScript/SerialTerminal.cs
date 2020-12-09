@@ -168,7 +168,7 @@ namespace MacroScript
             {
                 if (e.Node.Nodes.Count < 1 && e.Node.IsSelected == true)
                 {
-                    port.Write("?");
+                    port.Write("\r\n");
                     port.Write(e.Node.Text + "\r");
                 }
             }
@@ -259,27 +259,25 @@ namespace MacroScript
                 lbl_Status.Text = "Disconnected";
             }
         }
-        private void ReadSerialBuffer(string text)
+        private void ReadSerialBuffer(string SerialOut)
         {            
             try
             {
                 if (txt_RichSerialLog.InvokeRequired)
                 {
                     var d = new SafeCallDelegate(ReadSerialBuffer);
-                    txt_RichSerialLog.BeginInvoke(d, new object[] { text });
+                    txt_RichSerialLog.BeginInvoke(d, new object[] { SerialOut });
                 }
                 else
                 {
-                    if (text.Length > 0)
+                    txt_RichSerialLog.AppendText("\r" + SerialOut);
+                    txt_RichSerialLog.SelectionStart = txt_RichSerialLog.TextLength;
+                    txt_RichSerialLog.ScrollToCaret();
+                    if (WriteToFile == true)
                     {
-                        string SerialOutput = text + "\r";
-                        txt_RichSerialLog.AppendText(SerialOutput);
-                        if (WriteToFile == true)
-                        {
-                            AppendToLog(SerialOutput.Trim());
-                        }
+                        AppendToLog(SerialOut);
                     }
-                }
+                }              
             }
             catch (Exception ex)
             {
@@ -291,8 +289,6 @@ namespace MacroScript
             try
             {
                 ReadSerialBuffer(port.ReadExisting());
-                txt_RichSerialLog.SelectionStart = txt_RichSerialLog.TextLength;
-                txt_RichSerialLog.ScrollToCaret();
                 Thread.Sleep(1);
             }
             catch(Exception ex)
@@ -306,7 +302,7 @@ namespace MacroScript
             {
                 try
                 {
-                    port.Write("?");
+                    port.Write("\r\n");
                     port.Write(txt_SendCommand.Text + "\r");
                     txt_SendCommand.Text = string.Empty;
                 }
