@@ -12,6 +12,11 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.IO;
 
+/// <summary>
+/// RichTextBox = set hide selection to False in designview. Do not use scroll to carat()!
+/// This will auto scroll richtextbox with the desired expectation. 
+/// </summary>
+
 namespace MacroScript
 {
     public partial class SerialTerminal : Form
@@ -168,8 +173,10 @@ namespace MacroScript
             {
                 if (e.Node.Nodes.Count < 1 && e.Node.IsSelected == true)
                 {
-                    port.Write("\r\n");
-                    port.Write(e.Node.Text + "\r");
+                    byte[] bytes = Encoding.Default.GetBytes(e.Node.Text);
+                    e.Node.Text = Encoding.UTF8.GetString(bytes);
+                    //port.Write("\r\n");
+                    port.Write(e.Node.Text + "\r\n");
                 }
             }
             catch(Exception ex)
@@ -186,7 +193,6 @@ namespace MacroScript
         private StreamWriter sw;
         private void FileLogPath()
         {
-            //OpenFileDialog OpenFile = new OpenFileDialog();
             SaveFileDialog SaveFile = new SaveFileDialog();
             SaveFile.InitialDirectory = Environment.SpecialFolder.DesktopDirectory.ToString();
             var dlgOK = SaveFile.ShowDialog();
@@ -260,9 +266,11 @@ namespace MacroScript
             }
         }
         private void ReadSerialBuffer(string SerialOut)
-        {            
+        {
             try
             {
+                byte[] bytes = Encoding.Default.GetBytes(SerialOut);
+                SerialOut = Encoding.UTF8.GetString(bytes);
                 if (txt_RichSerialLog.InvokeRequired)
                 {
                     var d = new SafeCallDelegate(ReadSerialBuffer);
@@ -270,18 +278,59 @@ namespace MacroScript
                 }
                 else
                 {
-                    txt_RichSerialLog.AppendText("\r" + SerialOut);
-                    txt_RichSerialLog.SelectionStart = txt_RichSerialLog.TextLength;
-                    txt_RichSerialLog.ScrollToCaret();
-                    if (WriteToFile == true)
-                    {
-                        AppendToLog(SerialOut);
-                    }
-                }              
+                    txt_RichSerialLog.AppendText(SerialOut);
+                }
+                //Custom code added for this issue
+                FrameState(SerialOut);
+                //End of custom code
+                if (WriteToFile == true)
+                {
+                    AppendToLog(SerialOut);
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "ReadSerialBuffer()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        public void FrameState(string SerialOut)
+        {
+            string[] Frame_State = { "connected state", "audio streaming state", "voice call state", "standby mode", "Unknown", "pairing mode", "power off state" };
+            if (SerialOut.Contains("b2s edr state: " + Frame_State[0]) && lbl_Status.Text != "Connected")
+            {
+                lbl_Status.ForeColor = Color.Green;
+                lbl_Status.Text = "Connected";
+            }
+            else if (SerialOut.Contains("b2s edr state: " + Frame_State[1]) && lbl_Status.Text != "audio streaming state")
+            {
+                lbl_Status.ForeColor = Color.Blue;
+                lbl_Status.Text = "audio streaming state";
+            }
+            else if (SerialOut.Contains("b2s edr state: " + Frame_State[2]) && lbl_Status.Text != "voice call state")
+            {
+                lbl_Status.ForeColor = Color.Blue;
+                lbl_Status.Text = "voice call state";
+            }
+            else if (SerialOut.Contains("b2s edr state: " + Frame_State[3]) && lbl_Status.Text != "standby mode")
+            {
+                lbl_Status.ForeColor = Color.Orange;
+                lbl_Status.Text = "standby mode";
+            }
+            else if (SerialOut.Contains("b2s edr state: " + Frame_State[5]) && lbl_Status.Text != "pairing mode")
+            {
+                lbl_Status.ForeColor = Color.Orange;
+                lbl_Status.Text = "pairing mode";
+            }
+            else if (SerialOut.Contains("b2s edr state: " + Frame_State[6]) && lbl_Status.Text != "power off state")
+            {
+                lbl_Status.ForeColor = Color.Red;
+                lbl_Status.Text = "power off state";
+            }
+            else if(SerialOut.Contains("b2s edr state: ") && SerialOut.Contains("bt dump conn_state") == false && lbl_Status.Text != Frame_State[4])
+            {
+                //AppendToLog("TEST" + SerialOut);
+                lbl_Status.ForeColor = Color.Gray;
+                lbl_Status.Text = Frame_State[4];
             }
         }
         public void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -289,22 +338,28 @@ namespace MacroScript
             try
             {
                 ReadSerialBuffer(port.ReadExisting());
-                Thread.Sleep(1);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "port_DataReceived", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            }         
         }
-        private void SendCommand(object sender, KeyEventArgs e)
+        private async void SendCommand(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 try
                 {
-                    port.Write("\r\n");
-                    port.Write(txt_SendCommand.Text + "\r");
-                    txt_SendCommand.Text = string.Empty;
+                    port.Write(txt_SendCommand.Text + "\r\n");
+                    //txt_SendCommand.Text = string.Empty;
+
+                    //Custom code added just for this issue
+                    while(txt_SendCommand.Text == "bt dump conn_state")
+                    {
+                        port.Write(txt_SendCommand.Text + "\r\n");
+                        await Task.Run(() => Thread.Sleep(1000));
+                    }
+                    // End of custom code
                 }
                 catch (Exception ex)
                 {
