@@ -40,8 +40,27 @@ namespace MacroScript
                 MessageBox.Show(ex.Message, "Main()", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void radioButton_CheckedChanged(object sender, EventArgs e)
+        private void radioButton_CheckedChanged(object sender, MouseEventArgs e)
         {
+            RadioButton rb_select = (RadioButton)sender;
+            foreach (RadioButton rb in groupBox3.Controls.OfType<RadioButton>())
+            {               
+                if(rb.Text == rb_select.Text && rb_select.Name != radioButton3.Name)
+                {
+                    //RadioBaudrate = rb.Text;
+                    rb.Checked = true;
+                    break;
+                }
+                else if(rb.Text == rb_select.Text && rb_select.Name == radioButton3.Name)
+                {
+                    //we assume radioButton3 is what we want since the IF statement above is not true.
+                    //RadioBaudrate = txt_CustomBaudrate.Text;
+                    rb.Checked = true;                  
+                    break;
+                }
+            }
+            //lbl_Baudrate.Text = RadioBaudrate;
+            /*
             if (radioButton1.Checked == true)
             {
                 radioButton2.Checked = false;
@@ -60,6 +79,31 @@ namespace MacroScript
                 radioButton2.Checked = false;
                 RadioBaudrate = txt_CustomBaudrate.Text;
             }
+            */
+        }
+        private string setBaudRate()
+        {
+            foreach (RadioButton rb in groupBox3.Controls.OfType<RadioButton>())
+            {
+                if (rb.Checked == true && rb.Name != radioButton3.Name)
+                {
+                    //RadioBaudrate = rb.Text;
+                    //rb.Checked = true;
+                    //break;
+                    lbl_Baudrate.Text = rb.Text;
+                    return rb.Text;
+                }
+                else if (rb.Checked == true && rb.Name == radioButton3.Name)
+                {
+                    //we assume radioButton3 is what we want since the IF statement above is not true.
+                    //RadioBaudrate = txt_CustomBaudrate.Text;
+                    //rb.Checked = true;
+                    //break;
+                    lbl_Baudrate.Text = txt_CustomBaudrate.Text;
+                    return rb.Text;
+                }
+            }
+            return "0";
         }
         private string[] getPorts()
         {
@@ -173,9 +217,8 @@ namespace MacroScript
             {
                 if (e.Node.Nodes.Count < 1 && e.Node.IsSelected == true)
                 {
-                    byte[] bytes = Encoding.Default.GetBytes(e.Node.Text);
-                    e.Node.Text = Encoding.UTF8.GetString(bytes);
-                    //port.Write("\r\n");
+                    //byte[] bytes = Encoding.Default.GetBytes(e.Node.Text);
+                    //e.Node.Text = Encoding.UTF8.GetString(bytes);
                     port.Write(e.Node.Text + "\r\n");
                 }
             }
@@ -195,6 +238,8 @@ namespace MacroScript
         {
             SaveFileDialog SaveFile = new SaveFileDialog();
             SaveFile.InitialDirectory = Environment.SpecialFolder.DesktopDirectory.ToString();
+            //SaveFile.DefaultExt = ".txt";
+            SaveFile.Filter = "Text File (*.txt)|*.txt";
             var dlgOK = SaveFile.ShowDialog();
             if (dlgOK == DialogResult.OK)
             {
@@ -202,7 +247,8 @@ namespace MacroScript
                 filename = SaveFile.FileName;
                 sw = new StreamWriter(filename);
                 lbl_LogStatus.ForeColor = Color.Green;
-                lbl_LogStatus.Text = "Logging";        
+                lbl_LogStatus.Text = "Logging";
+                btn_log.Text = "Stop";
             }
         }
         private void btn_log_Click(object sender, EventArgs e)
@@ -216,6 +262,7 @@ namespace MacroScript
                 sw.Close();
                 WriteToFile = false;
                 lbl_LogStatus.Text = "";
+                btn_log.Text = "Log";
             }
         }
         private void AppendToLog(string text)
@@ -226,20 +273,78 @@ namespace MacroScript
             }
             catch(Exception ex)
             {
+                //lbl_Status.ForeColor = Color.Red;
+                //lbl_Status.Text = ex.Message;
+                //sw.Close();
+                MessageBox.Show(text, "Could not write serial output to logs", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                //lbl_LogStatus.Text = "";
+                lbl_LogStatus.ForeColor = Color.Red;
+                lbl_LogStatus.Text = ex.Message;
+            }
+        }
+        public void FrameState(string SerialOut)
+        {
+            string[] Frame_State = { "connected state", "audio streaming state", "voice call state", "standby mode", "Unknown", "pairing mode", "power off state" };
+
+            if (SerialOut.Contains("b2s edr state: " + Frame_State[0]) && lbl_Status.Text != "Connected")
+            {
+                lbl_Status.ForeColor = Color.Green;
+                lbl_Status.Text = "Connected";
+            }
+            else if (SerialOut.Contains("b2s edr state: " + Frame_State[1]) && lbl_Status.Text != Frame_State[1])
+            {
+                lbl_Status.ForeColor = Color.Blue;
+                lbl_Status.Text = "audio streaming state";
+            }
+            else if (SerialOut.Contains("b2s edr state: " + Frame_State[2]) && lbl_Status.Text != Frame_State[2])
+            {
+                lbl_Status.ForeColor = Color.Blue;
+                lbl_Status.Text = "voice call state";
+            }
+            else if (SerialOut.Contains("b2s edr state: " + Frame_State[3]) && lbl_Status.Text != Frame_State[3])
+            {
+                lbl_Status.ForeColor = Color.Orange;
+                lbl_Status.Text = "standby mode";
+            }
+            else if (SerialOut.Contains("b2s edr state: " + Frame_State[5]) && lbl_Status.Text != Frame_State[5])
+            {
+                lbl_Status.ForeColor = Color.Orange;
+                lbl_Status.Text = "pairing mode";
+            }
+            else if (SerialOut.Contains("b2s edr state: " + Frame_State[6]) && lbl_Status.Text != Frame_State[6])
+            {
                 lbl_Status.ForeColor = Color.Red;
-                lbl_Status.Text = ex.Message;
-                sw.Close();
-                lbl_LogStatus.Text = "";
+                lbl_Status.Text = "power off state";
+            }
+            else if (SerialOut.Contains("b2s edr state: ") && SerialOut.Contains("bt dump conn_state") == false && lbl_Status.Text != Frame_State[4])
+            {
+                lbl_Status.ForeColor = Color.Gray;
+                lbl_Status.Text = "Unknown";
+            }
+
+            if(SerialOut.Contains("dtest battery_capacity"))
+            {
+                string BatteryCapacity = "";
+                int Start = SerialOut.IndexOf("dtest battery_capacity"); //dtest battery_capacity is a place holder. Must change to the actual battery output command
+                int End = "dtest battery_capacity".Length; //dtest battery_capacity is a place holder. Must change to the actual battery output command
+                int StartPos = Start + End;
+                BatteryCapacity = SerialOut.Substring(StartPos, 3);
+                if (BatteryCapacity != "")
+                {
+                    lbl_Status.Text = "Battery:" + BatteryCapacity + "%";
+                }
             }
         }
 
         SerialPort port;
-        string RadioBaudrate;
+        //string RadioBaudrate;
         private delegate void SafeCallDelegate(string text);
 
         private SerialPort OpenPorts()
         {
-            port = new SerialPort(txt_ComPort.Text, int.Parse(RadioBaudrate), Parity.None, 8, StopBits.One);
+            string getRadioBaudRate = setBaudRate();
+            //port = new SerialPort(txt_ComPort.Text, int.Parse(RadioBaudrate), Parity.None, 8, StopBits.One);
+            port = new SerialPort(txt_ComPort.Text, int.Parse(getRadioBaudRate), Parity.None, 8, StopBits.One);
             return port;
         }
         private void serialCommands()
@@ -249,7 +354,7 @@ namespace MacroScript
                 port.DataReceived += new SerialDataReceivedEventHandler(port_DataReceived);
                 port.Open();
                 lbl_ComPort.Text = txt_ComPort.Text;
-                lbl_Baudrate.Text = RadioBaudrate;
+                //lbl_Baudrate.Text = RadioBaudrate;
                 btn_Connect.Enabled = false;
                 btn_Close.Enabled = true;
                 statusBarAdv1.ForeColor = Color.Green;
@@ -265,12 +370,23 @@ namespace MacroScript
                 lbl_Status.Text = "Disconnected";
             }
         }
+        public void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            try
+            {
+                ReadSerialBuffer(port.ReadExisting());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "port_DataReceived", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private void ReadSerialBuffer(string SerialOut)
         {
             try
             {
-                byte[] bytes = Encoding.Default.GetBytes(SerialOut);
-                SerialOut = Encoding.UTF8.GetString(bytes);
+                //byte[] bytes = Encoding.Default.GetBytes(SerialOut);
+                //SerialOut = Encoding.UTF8.GetString(bytes);
                 if (txt_RichSerialLog.InvokeRequired)
                 {
                     var d = new SafeCallDelegate(ReadSerialBuffer);
@@ -280,9 +396,12 @@ namespace MacroScript
                 {
                     txt_RichSerialLog.AppendText(SerialOut);
                 }
-                //Custom code added for this issue
-                FrameState(SerialOut);
-                //End of custom code
+
+                if(txt_SendCommand.Text == "bt dump conn_state" || txt_SendCommand.Text == "dtest battery_capacity")
+                { 
+                    FrameState(SerialOut); //Custom Code
+                }
+
                 if (WriteToFile == true)
                 {
                     AppendToLog(SerialOut);
@@ -293,57 +412,6 @@ namespace MacroScript
                 MessageBox.Show(ex.Message, "ReadSerialBuffer()", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public void FrameState(string SerialOut)
-        {
-            string[] Frame_State = { "connected state", "audio streaming state", "voice call state", "standby mode", "Unknown", "pairing mode", "power off state" };
-            if (SerialOut.Contains("b2s edr state: " + Frame_State[0]) && lbl_Status.Text != "Connected")
-            {
-                lbl_Status.ForeColor = Color.Green;
-                lbl_Status.Text = "Connected";
-            }
-            else if (SerialOut.Contains("b2s edr state: " + Frame_State[1]) && lbl_Status.Text != "audio streaming state")
-            {
-                lbl_Status.ForeColor = Color.Blue;
-                lbl_Status.Text = "audio streaming state";
-            }
-            else if (SerialOut.Contains("b2s edr state: " + Frame_State[2]) && lbl_Status.Text != "voice call state")
-            {
-                lbl_Status.ForeColor = Color.Blue;
-                lbl_Status.Text = "voice call state";
-            }
-            else if (SerialOut.Contains("b2s edr state: " + Frame_State[3]) && lbl_Status.Text != "standby mode")
-            {
-                lbl_Status.ForeColor = Color.Orange;
-                lbl_Status.Text = "standby mode";
-            }
-            else if (SerialOut.Contains("b2s edr state: " + Frame_State[5]) && lbl_Status.Text != "pairing mode")
-            {
-                lbl_Status.ForeColor = Color.Orange;
-                lbl_Status.Text = "pairing mode";
-            }
-            else if (SerialOut.Contains("b2s edr state: " + Frame_State[6]) && lbl_Status.Text != "power off state")
-            {
-                lbl_Status.ForeColor = Color.Red;
-                lbl_Status.Text = "power off state";
-            }
-            else if(SerialOut.Contains("b2s edr state: ") && SerialOut.Contains("bt dump conn_state") == false && lbl_Status.Text != Frame_State[4])
-            {
-                //AppendToLog("TEST" + SerialOut);
-                lbl_Status.ForeColor = Color.Gray;
-                lbl_Status.Text = Frame_State[4];
-            }
-        }
-        public void port_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            try
-            {
-                ReadSerialBuffer(port.ReadExisting());
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "port_DataReceived", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }         
-        }
         private async void SendCommand(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -351,13 +419,12 @@ namespace MacroScript
                 try
                 {
                     port.Write(txt_SendCommand.Text + "\r\n");
-                    //txt_SendCommand.Text = string.Empty;
 
                     //Custom code added just for this issue
-                    while(txt_SendCommand.Text == "bt dump conn_state")
+                    while(txt_SendCommand.Text == "bt dump conn_state" || txt_SendCommand.Text == "dtest battery_capacity")
                     {
-                        port.Write(txt_SendCommand.Text + "\r\n");
                         await Task.Run(() => Thread.Sleep(1000));
+                        port.Write(txt_SendCommand.Text + "\r\n");                      
                     }
                     // End of custom code
                 }

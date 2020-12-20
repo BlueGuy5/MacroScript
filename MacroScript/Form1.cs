@@ -112,6 +112,7 @@ namespace MacroScript
             try
             {
                 list_txtFiles.Items.Clear();
+                list_txtFiles.Items.Add("All Commands");
                 foreach (string file in retDir())
                 {
                     if (file.IndexOf("CustomMacro") < 0)
@@ -145,42 +146,71 @@ namespace MacroScript
         }
         private void readTxtFiles(object sender, EventArgs e)
         {
-            //string fullpath = txt_DirFiles.Text + list_txtFiles.SelectedItem;
-            string fullpath = txt_DirFiles.Text + sender.ToString();
-            var linesToSort = new List<string>();
-            string[] lines = System.IO.File.ReadAllLines(fullpath);
-
-            //cntlines and currentlines are included so we won't create a new line at the end of the file
-            int cntlines = 0;
-            int currentlines = 1;
-            foreach (string line in lines)
+            if (sender.ToString() == "All Commands")
             {
-                cntlines++;
-            }
-            foreach (string line in lines)
-            {
-                linesToSort.Add(line);
-                if (currentlines == cntlines)
+                var list_cmd = new List<string>();
+                foreach (string file in retDir())
                 {
-                    txt_readfiles.AppendText(line);
+                    if (file.IndexOf("CustomMacro") < 0)
+                    {
+                        foreach(string line in System.IO.File.ReadLines(file))
+                        {
+                            list_cmd.Add(line);
+                        }
+                    }
                 }
-                else
+                list_cmd.Sort();
+                foreach (string cmd in list_cmd)
                 {
-                    txt_readfiles.AppendText(line + "\r\n");
-                    currentlines++;
+                    Button btn_line = new Button();
+                    btn_line.Text = cmd;
+                    btn_line.AutoSize = true;
+                    btn_line.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                    btn_line.Height = 25;
+                    btn_line.Click += new EventHandler(writeCMD);
+                    Panel_readfile.Controls.Add(btn_line);
+                    txt_readfiles.AppendText(cmd + "\r\n");
                 }
             }
-
-            linesToSort.Sort();
-            foreach (string line in linesToSort)
+            else
             {
-                Button btn_line = new Button();
-                btn_line.Text = line;
-                btn_line.AutoSize = true;
-                btn_line.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-                btn_line.Height = 25;
-                btn_line.Click += new EventHandler(writeCMD);
-                Panel_readfile.Controls.Add(btn_line);
+                //string fullpath = txt_DirFiles.Text + list_txtFiles.SelectedItem;
+                string fullpath = txt_DirFiles.Text + sender.ToString();
+                var linesToSort = new List<string>();
+                string[] lines = System.IO.File.ReadAllLines(fullpath);
+
+                //cntlines and currentlines are included so we won't create a new line at the end of the file
+                int cntlines = 0;
+                int currentlines = 1;
+                foreach (string line in lines)
+                {
+                    cntlines++;
+                }
+                foreach (string line in lines)
+                {
+                    linesToSort.Add(line);
+                    if (currentlines == cntlines)
+                    {
+                        txt_readfiles.AppendText(line);
+                    }
+                    else
+                    {
+                        txt_readfiles.AppendText(line + "\r\n");
+                        currentlines++;
+                    }
+                }
+
+                linesToSort.Sort();
+                foreach (string line in linesToSort)
+                {
+                    Button btn_line = new Button();
+                    btn_line.Text = line;
+                    btn_line.AutoSize = true;
+                    btn_line.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+                    btn_line.Height = 25;
+                    btn_line.Click += new EventHandler(writeCMD);
+                    Panel_readfile.Controls.Add(btn_line);
+                }
             }
         }
 
