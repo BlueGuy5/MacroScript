@@ -265,6 +265,17 @@ namespace MacroScript
                 btn_log.Text = "Log";
             }
         }
+        private void LogRightClickMenu(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                LogMenu.Show(Cursor.Position);
+            }
+        }
+        private void ClearScreenClick(object sender, EventArgs e)
+        {
+            txt_RichSerialLog.Text = string.Empty;
+        }
         private void AppendToLog(string text)
         {
             try
@@ -321,18 +332,25 @@ namespace MacroScript
                 lbl_Status.ForeColor = Color.Gray;
                 lbl_Status.Text = "Unknown";
             }
-
-            if(SerialOut.Contains("dtest battery_capacity"))
+            string BatteryCapacity = "";
+            try
             {
-                string BatteryCapacity = "";
-                int Start = SerialOut.IndexOf("dtest battery_capacity"); //dtest battery_capacity is a place holder. Must change to the actual battery output command
-                int End = "dtest battery_capacity".Length; //dtest battery_capacity is a place holder. Must change to the actual battery output command
-                int StartPos = Start + End;
-                BatteryCapacity = SerialOut.Substring(StartPos, 3);
-                if (BatteryCapacity != "")
+                if (SerialOut.Contains("max1704x : capacity : "))
                 {
-                    lbl_Status.Text = "Battery:" + BatteryCapacity + "%";
+                    //string BatteryCapacity = "";
+                    int Start = SerialOut.IndexOf("max1704x : capacity : ");
+                    int End = "max1704x : capacity : ".Length;
+                    int StartPos = Start + End;
+                    BatteryCapacity = SerialOut.Substring(StartPos, 3);
+                    if (BatteryCapacity != "")
+                    {
+                        lbl_Status.Text = "Battery: " + BatteryCapacity.Trim() + "%";
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                //Intentionally catch nothing here
             }
         }
 
@@ -452,6 +470,8 @@ namespace MacroScript
         {
             try
             {
+                port.DiscardInBuffer();
+                port.DiscardOutBuffer();
                 port.Close();
                 statusBarAdv1.ForeColor = Color.Red;
                 lbl_Status.ForeColor = Color.Red;
