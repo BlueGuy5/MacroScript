@@ -100,7 +100,7 @@ namespace MacroScript
                     //rb.Checked = true;
                     //break;
                     lbl_Baudrate.Text = txt_CustomBaudrate.Text;
-                    return rb.Text;
+                    return txt_CustomBaudrate.Text;
                 }
             }
             return "0";
