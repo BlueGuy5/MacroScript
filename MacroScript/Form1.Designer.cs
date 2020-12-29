@@ -66,8 +66,7 @@
             // txt_readfiles
             // 
             this.txt_readfiles.AllowDrop = true;
-            this.txt_readfiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.txt_readfiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_readfiles.BackColor = System.Drawing.Color.Silver;
             this.txt_readfiles.Location = new System.Drawing.Point(239, 215);
