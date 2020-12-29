@@ -47,39 +47,16 @@ namespace MacroScript
             {               
                 if(rb.Text == rb_select.Text && rb_select.Name != radioButton3.Name)
                 {
-                    //RadioBaudrate = rb.Text;
                     rb.Checked = true;
                     break;
                 }
                 else if(rb.Text == rb_select.Text && rb_select.Name == radioButton3.Name)
                 {
                     //we assume radioButton3 is what we want since the IF statement above is not true.
-                    //RadioBaudrate = txt_CustomBaudrate.Text;
                     rb.Checked = true;                  
                     break;
                 }
             }
-            //lbl_Baudrate.Text = RadioBaudrate;
-            /*
-            if (radioButton1.Checked == true)
-            {
-                radioButton2.Checked = false;
-                radioButton3.Checked = false;
-                RadioBaudrate = radioButton1.Text;
-            }
-            else if (radioButton2.Checked == true)
-            {
-                radioButton1.Checked = false;
-                radioButton3.Checked = false;
-                RadioBaudrate = radioButton2.Text;
-            }
-            else if (radioButton3.Checked == true)
-            {
-                radioButton1.Checked = false;
-                radioButton2.Checked = false;
-                RadioBaudrate = txt_CustomBaudrate.Text;
-            }
-            */
         }
         private string setBaudRate()
         {
@@ -87,18 +64,12 @@ namespace MacroScript
             {
                 if (rb.Checked == true && rb.Name != radioButton3.Name)
                 {
-                    //RadioBaudrate = rb.Text;
-                    //rb.Checked = true;
-                    //break;
                     lbl_Baudrate.Text = rb.Text;
                     return rb.Text;
                 }
                 else if (rb.Checked == true && rb.Name == radioButton3.Name)
                 {
                     //we assume radioButton3 is what we want since the IF statement above is not true.
-                    //RadioBaudrate = txt_CustomBaudrate.Text;
-                    //rb.Checked = true;
-                    //break;
                     lbl_Baudrate.Text = txt_CustomBaudrate.Text;
                     return txt_CustomBaudrate.Text;
                 }
@@ -215,12 +186,14 @@ namespace MacroScript
         {
             try
             {
-                if (e.Node.Nodes.Count < 1 && e.Node.IsSelected == true)
+                if (e.Node.Nodes.Count < 1 && e.Node.IsSelected == true && e.Button == MouseButtons.Left)
                 {
-                    //byte[] bytes = Encoding.Default.GetBytes(e.Node.Text);
-                    //e.Node.Text = Encoding.UTF8.GetString(bytes);
                     port.Write(e.Node.Text + "\r\n");
                 }
+                else if(e.Node.Nodes.Count < 1 && e.Button == MouseButtons.Right)
+                {
+                    txt_SendCommand.Text = e.Node.Text;
+                }                     
             }
             catch(Exception ex)
             {
@@ -284,11 +257,7 @@ namespace MacroScript
             }
             catch(Exception ex)
             {
-                //lbl_Status.ForeColor = Color.Red;
-                //lbl_Status.Text = ex.Message;
-                //sw.Close();
                 MessageBox.Show(text, "Could not write serial output to logs", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                //lbl_LogStatus.Text = "";
                 lbl_LogStatus.ForeColor = Color.Red;
                 lbl_LogStatus.Text = ex.Message;
             }
@@ -337,7 +306,6 @@ namespace MacroScript
             {
                 if (SerialOut.Contains("max1704x : capacity : "))
                 {
-                    //string BatteryCapacity = "";
                     int Start = SerialOut.IndexOf("max1704x : capacity : ");
                     int End = "max1704x : capacity : ".Length;
                     int StartPos = Start + End;
@@ -355,13 +323,11 @@ namespace MacroScript
         }
 
         SerialPort port;
-        //string RadioBaudrate;
         private delegate void SafeCallDelegate(string text);
 
         private SerialPort OpenPorts()
         {
             string getRadioBaudRate = setBaudRate();
-            //port = new SerialPort(txt_ComPort.Text, int.Parse(RadioBaudrate), Parity.None, 8, StopBits.One);
             port = new SerialPort(txt_ComPort.Text, int.Parse(getRadioBaudRate), Parity.None, 8, StopBits.One);
             return port;
         }
@@ -372,7 +338,6 @@ namespace MacroScript
                 port.DataReceived += new SerialDataReceivedEventHandler(port_DataReceived);
                 port.Open();
                 lbl_ComPort.Text = txt_ComPort.Text;
-                //lbl_Baudrate.Text = RadioBaudrate;
                 btn_Connect.Enabled = false;
                 btn_Close.Enabled = true;
                 statusBarAdv1.ForeColor = Color.Green;
@@ -403,8 +368,6 @@ namespace MacroScript
         {
             try
             {
-                //byte[] bytes = Encoding.Default.GetBytes(SerialOut);
-                //SerialOut = Encoding.UTF8.GetString(bytes);
                 if (txt_RichSerialLog.InvokeRequired)
                 {
                     var d = new SafeCallDelegate(ReadSerialBuffer);
@@ -413,16 +376,14 @@ namespace MacroScript
                 else
                 {
                     txt_RichSerialLog.AppendText(SerialOut);
+                    if (WriteToFile == true)
+                    {
+                        AppendToLog(SerialOut);
+                    }
                 }
-
                 if(txt_SendCommand.Text == "bt dump conn_state" || txt_SendCommand.Text == "dtest battery_capacity")
                 { 
                     FrameState(SerialOut); //Custom Code
-                }
-
-                if (WriteToFile == true)
-                {
-                    AppendToLog(SerialOut);
                 }
             }
             catch (Exception ex)
@@ -442,7 +403,10 @@ namespace MacroScript
                     while(txt_SendCommand.Text == "bt dump conn_state" || txt_SendCommand.Text == "dtest battery_capacity")
                     {
                         await Task.Run(() => Thread.Sleep(1000));
-                        port.Write(txt_SendCommand.Text + "\r\n");                      
+                        if (port.IsOpen == true)
+                        {
+                            port.Write(txt_SendCommand.Text + "\r\n");
+                        }   
                     }
                     // End of custom code
                 }
@@ -492,6 +456,11 @@ namespace MacroScript
                 MessageBox.Show(ex.Message, "Close Connection Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 btn_Connect.Enabled = false;
                 btn_Close.Enabled = true;
+            }
+            finally
+            {
+                btn_Close.Enabled = false;
+                btn_Connect.Enabled = true;
             }
         }
         private void HideSerialTerminal(object sender, KeyEventArgs e)
