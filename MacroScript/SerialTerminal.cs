@@ -218,7 +218,7 @@ namespace MacroScript
             {
                 WriteToFile = true;
                 filename = SaveFile.FileName;
-                sw = new StreamWriter(filename);
+                sw = new StreamWriter(filename, true);
                 lbl_LogStatus.ForeColor = Color.Green;
                 lbl_LogStatus.Text = "Logging";
                 btn_log.Text = "Stop";
