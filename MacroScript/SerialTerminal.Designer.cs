@@ -44,6 +44,7 @@
             Syncfusion.Windows.Forms.MetroColorTable metroColorTable13 = new Syncfusion.Windows.Forms.MetroColorTable();
             Syncfusion.Windows.Forms.MetroColorTable metroColorTable14 = new Syncfusion.Windows.Forms.MetroColorTable();
             Syncfusion.Windows.Forms.MetroColorTable metroColorTable15 = new Syncfusion.Windows.Forms.MetroColorTable();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SerialTerminal));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btn_log = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -59,7 +60,7 @@
             this.treeView_Files = new System.Windows.Forms.TreeView();
             this.btn_TreeViewReload = new System.Windows.Forms.Button();
             this.statusBarAdv1 = new Syncfusion.Windows.Forms.Tools.StatusBarAdv();
-            this.lbl_Status = new System.Windows.Forms.Label();
+            this.lbl_DSN = new System.Windows.Forms.Label();
             this.lbl_ComPort = new System.Windows.Forms.Label();
             this.lbl_Baudrate = new System.Windows.Forms.Label();
             this.lbl_LogStatus = new System.Windows.Forms.Label();
@@ -69,6 +70,7 @@
             this.ScrollComPorts = new Syncfusion.Windows.Forms.ScrollersFrame(this.components);
             this.LogMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearScreenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lbl_Status = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -258,6 +260,7 @@
             // 
             this.statusBarAdv1.BeforeTouchSize = new System.Drawing.Size(834, 21);
             this.statusBarAdv1.Controls.Add(this.lbl_Status);
+            this.statusBarAdv1.Controls.Add(this.lbl_DSN);
             this.statusBarAdv1.Controls.Add(this.lbl_ComPort);
             this.statusBarAdv1.Controls.Add(this.lbl_Baudrate);
             this.statusBarAdv1.Controls.Add(this.lbl_LogStatus);
@@ -272,19 +275,20 @@
             this.statusBarAdv1.TabIndex = 5;
             this.statusBarAdv1.ThemesEnabled = true;
             // 
-            // lbl_Status
+            // lbl_DSN
             // 
-            this.lbl_Status.AutoSize = true;
-            this.lbl_Status.Location = new System.Drawing.Point(0, 2);
-            this.lbl_Status.Name = "lbl_Status";
-            this.lbl_Status.Size = new System.Drawing.Size(73, 13);
-            this.lbl_Status.TabIndex = 3;
-            this.lbl_Status.Text = "Disconnected";
+            this.lbl_DSN.AutoSize = true;
+            this.lbl_DSN.ForeColor = System.Drawing.Color.Green;
+            this.lbl_DSN.Location = new System.Drawing.Point(75, 2);
+            this.lbl_DSN.Name = "lbl_DSN";
+            this.lbl_DSN.Size = new System.Drawing.Size(30, 13);
+            this.lbl_DSN.TabIndex = 3;
+            this.lbl_DSN.Text = "DSN";
             // 
             // lbl_ComPort
             // 
             this.lbl_ComPort.AutoSize = true;
-            this.lbl_ComPort.Location = new System.Drawing.Point(75, 2);
+            this.lbl_ComPort.Location = new System.Drawing.Point(107, 2);
             this.lbl_ComPort.Name = "lbl_ComPort";
             this.lbl_ComPort.Size = new System.Drawing.Size(0, 13);
             this.lbl_ComPort.TabIndex = 2;
@@ -292,7 +296,7 @@
             // lbl_Baudrate
             // 
             this.lbl_Baudrate.AutoSize = true;
-            this.lbl_Baudrate.Location = new System.Drawing.Point(77, 2);
+            this.lbl_Baudrate.Location = new System.Drawing.Point(109, 2);
             this.lbl_Baudrate.Name = "lbl_Baudrate";
             this.lbl_Baudrate.Size = new System.Drawing.Size(0, 13);
             this.lbl_Baudrate.TabIndex = 1;
@@ -300,7 +304,7 @@
             // lbl_LogStatus
             // 
             this.lbl_LogStatus.AutoSize = true;
-            this.lbl_LogStatus.Location = new System.Drawing.Point(79, 2);
+            this.lbl_LogStatus.Location = new System.Drawing.Point(111, 2);
             this.lbl_LogStatus.Name = "lbl_LogStatus";
             this.lbl_LogStatus.Size = new System.Drawing.Size(0, 13);
             this.lbl_LogStatus.TabIndex = 4;
@@ -695,14 +699,23 @@
             this.LogMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clearScreenToolStripMenuItem});
             this.LogMenu.Name = "LogMenu";
-            this.LogMenu.Size = new System.Drawing.Size(181, 48);
+            this.LogMenu.Size = new System.Drawing.Size(140, 26);
             // 
             // clearScreenToolStripMenuItem
             // 
             this.clearScreenToolStripMenuItem.Name = "clearScreenToolStripMenuItem";
-            this.clearScreenToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearScreenToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.clearScreenToolStripMenuItem.Text = "Clear Screen";
             this.clearScreenToolStripMenuItem.Click += new System.EventHandler(this.ClearScreenClick);
+            // 
+            // lbl_Status
+            // 
+            this.lbl_Status.AutoSize = true;
+            this.lbl_Status.Location = new System.Drawing.Point(0, 2);
+            this.lbl_Status.Name = "lbl_Status";
+            this.lbl_Status.Size = new System.Drawing.Size(73, 13);
+            this.lbl_Status.TabIndex = 5;
+            this.lbl_Status.Text = "Disconnected";
             // 
             // SerialTerminal
             // 
@@ -715,6 +728,7 @@
             this.Controls.Add(this.txt_SendCommand);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.treeView_Files);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.Name = "SerialTerminal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -746,7 +760,7 @@
         private System.Windows.Forms.TreeView treeView_Files;
         private System.Windows.Forms.Button btn_TreeViewReload;
         private Syncfusion.Windows.Forms.Tools.StatusBarAdv statusBarAdv1;
-        private System.Windows.Forms.Label lbl_Status;
+        private System.Windows.Forms.Label lbl_DSN;
         private System.Windows.Forms.Label lbl_ComPort;
         private System.Windows.Forms.Label lbl_Baudrate;
         private Syncfusion.Windows.Forms.Tools.ComboDropDown txt_ComPort;
@@ -760,5 +774,6 @@
         private System.Windows.Forms.Label lbl_LogStatus;
         private System.Windows.Forms.ContextMenuStrip LogMenu;
         private System.Windows.Forms.ToolStripMenuItem clearScreenToolStripMenuItem;
+        private System.Windows.Forms.Label lbl_Status;
     }
 }
