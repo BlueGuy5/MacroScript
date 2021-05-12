@@ -24,7 +24,7 @@ namespace MacroScript
         public SerialTerminal()
         {
             InitializeComponent();
-            this.KeyDown += new KeyEventHandler(HideSerialTerminal);
+            //this.KeyDown += new KeyEventHandler(HideSerialTerminal);
             this.KeyDown += new KeyEventHandler(SendCommand);
             this.FormClosing += new FormClosingEventHandler(OnSerialFormClosing);
         }
@@ -218,7 +218,7 @@ namespace MacroScript
             {
                 WriteToFile = true;
                 filename = SaveFile.FileName;
-                sw = new StreamWriter(filename, true);
+                sw = new StreamWriter(filename, true); //Feb 8 2021 - Now appends the file.
                 lbl_LogStatus.ForeColor = Color.Green;
                 lbl_LogStatus.Text = "Logging";
                 btn_log.Text = "Stop";
@@ -320,6 +320,25 @@ namespace MacroScript
             {
                 //Intentionally catch nothing here
             }
+            string DSN = "";
+            try
+            {
+                if(SerialOut.Contains("Zephyr DSN read: "))
+                {
+                    int Start = SerialOut.IndexOf("Zephyr DSN read: ");
+                    int End = "Zephyr DSN read: ".Length;
+                    int StartPos = Start + End;
+                    DSN = SerialOut.Substring(StartPos, 16);
+                    if (DSN != "")
+                    {
+                        lbl_DSN.Text = DSN.Trim();
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, "DSN read Error - " + DSN.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         SerialPort port;
@@ -335,8 +354,9 @@ namespace MacroScript
         {
             try
             {
-                port.DataReceived += new SerialDataReceivedEventHandler(port_DataReceived);
+                //port.DataReceived += new SerialDataReceivedEventHandler(port_DataReceived);
                 port.Open();
+                port.DataReceived += new SerialDataReceivedEventHandler(port_DataReceived);
                 lbl_ComPort.Text = txt_ComPort.Text;
                 btn_Connect.Enabled = false;
                 btn_Close.Enabled = true;
@@ -385,6 +405,10 @@ namespace MacroScript
                 { 
                     FrameState(SerialOut); //Custom Code
                 }
+                if(SerialOut.Contains("dtest SW_f_idme_read dsn"))
+                {
+                    FrameState(SerialOut);
+                }
             }
             catch (Exception ex)
             {
@@ -422,6 +446,14 @@ namespace MacroScript
             {
                 OpenPorts();
                 serialCommands();
+                try
+                {
+                    port.Write("dtest SW_f_idme_read dsn" + "\r\n");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Get Frame DSN", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
             catch (Exception ex)
             {
@@ -442,6 +474,8 @@ namespace MacroScript
                 lbl_Status.Text = "Disconnected";
                 lbl_ComPort.Text = string.Empty;
                 lbl_Baudrate.Text = string.Empty;
+                lbl_Status.Text = string.Empty;
+                lbl_DSN.Text = string.Empty;
                 btn_Close.Enabled = false;
                 btn_Connect.Enabled = true;
                 if (WriteToFile == true)
@@ -474,19 +508,20 @@ namespace MacroScript
         {
             try
             {
-                this.Hide();
-                e.Cancel = true;
+                if(port.IsOpen == true)
+                //this.Hide();
+                //e.Cancel = true;
                 port.Close();
                 port.Dispose();
-                statusBarAdv1.ForeColor = Color.Red;
-                lbl_Status.Text = "Disconnected";
-                lbl_ComPort.Text = string.Empty;
-                lbl_Baudrate.Text = string.Empty;
-                txt_RichSerialLog.Text = string.Empty;
+                //statusBarAdv1.ForeColor = Color.Red;
+                //lbl_Status.Text = "Disconnected";
+                //lbl_ComPort.Text = string.Empty;
+                //lbl_Baudrate.Text = string.Empty;
+                //txt_RichSerialLog.Text = string.Empty;
             }
             catch (Exception ex)
             {
-                lbl_Status.Text = ex.Message;
+                //lbl_Status.Text = ex.Message;
             }
         }
     }
